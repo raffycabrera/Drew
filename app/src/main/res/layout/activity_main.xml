@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".Login">
 
     <EditText
         android:id="@+id/Email"
@@ -32,7 +32,7 @@
         app:layout_constraintTop_toBottomOf="@+id/Email" />
 
     <Button
-        android:id="@+id/createText"
+        android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -41,16 +41,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password" />
 
-    <Button
+    <TextView
         android:id="@+id/createButton"
         android:layout_width="98dp"
         android:layout_height="51dp"
+        android:layout_marginTop="28dp"
         android:text="Sign Up!"
         app:backgroundTint="#000000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="455dp"
+        app:layout_constraintTop_toBottomOf="@+id/createText"
         tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
