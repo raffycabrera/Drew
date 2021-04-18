@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "294534909870",
+    "firebase_url": "https://disaster-response-emergency-w-default-rtdb.firebaseio.com",
+    "project_id": "disaster-response-emergency-w",
+    "storage_bucket": "disaster-response-emergency-w.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:294534909870:android:6d026cc1ab36869769823f",
+        "android_client_info": {
+          "package_name": "edu.dlsu.drew"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "294534909870-9ej2udj46vq81l5e75rrt43h1vkrm25v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGbW4juyLXbkF3TEIQVVw1-uk9-XztyEk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "294534909870-9ej2udj46vq81l5e75rrt43h1vkrm25v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
