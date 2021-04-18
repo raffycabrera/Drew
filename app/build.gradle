@@ -9,8 +9,9 @@ android {
 
     defaultConfig {
         applicationId "edu.dlsu.drew"
-        minSdkVersion 16
-        targetSdkVersion 30
+        minSdkVersion 21
+        targetSdkVersion 26
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
 
