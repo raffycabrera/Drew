@@ -7,6 +7,9 @@
     android:background="#335C7D"
     tools:context=".Login">
 
+
+    <!-- push these changes into the xml file    -->
+
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="335dp"
