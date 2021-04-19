@@ -46,7 +46,7 @@ public class Register extends AppCompatActivity {
         mPassword   = findViewById(R.id.password);
 
         mRegisterBtn= findViewById(R.id.registerBtn);
-        mLoginBtn   = findViewById(R.id.createText);
+        //mLoginBtn   = findViewById(R.id.createText);
 
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
@@ -80,8 +80,6 @@ public class Register extends AppCompatActivity {
                     mPassword.setError("Password Must be >= 6 Characters");
                     return;
                 }
-
-                progressBar.setVisibility(View.VISIBLE);
 
                 // register the user in firebase
 
@@ -135,13 +133,14 @@ public class Register extends AppCompatActivity {
         });
 
 
-
+/**
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(),Login.class));
             }
-        });
+        }
+ ); */
 
     }
 }

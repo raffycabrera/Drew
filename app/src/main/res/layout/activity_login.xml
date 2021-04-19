@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#335C7D"
-    tools:context=".MainActivity">
+    tools:context=".Login">
 
     <ImageView
         android:id="@+id/imageView4"
@@ -61,6 +61,9 @@
         android:layout_height="41dp"
         android:layout_marginTop="20dp"
         android:text="New User? Sign Up!"
+
+        android:onClick="swapToRegister"
+
         android:textColor="#FFFFFF"
         app:backgroundTint="#F67280"
         app:layout_constraintEnd_toEndOf="parent"

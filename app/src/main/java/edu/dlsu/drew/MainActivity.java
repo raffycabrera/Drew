@@ -21,4 +21,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    public void swapToRegister(View view){
+        Intent intent = new Intent(this, Register.class);
+        startActivity(intent);
+
+
+    }
+
 }

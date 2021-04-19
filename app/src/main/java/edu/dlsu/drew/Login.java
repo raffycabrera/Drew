@@ -23,8 +23,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class Login extends AppCompatActivity {
     EditText mEmail,mPassword;
-    Button mLoginBtn;
-    TextView  mCreateBtn,forgotTextLink;
+    Button mLoginBtn,mCreateBtn;
+    TextView forgotTextLink;
     ProgressBar progressBar;
     FirebaseAuth fAuth;
 // did i edit  - james
@@ -63,7 +63,6 @@ public class Login extends AppCompatActivity {
                     return;
                 }
 
-                progressBar.setVisibility(View.VISIBLE);
 
                 // authenticate the user
 
@@ -84,16 +83,19 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        mCreateBtn.setOnClickListener(new View.OnClickListener() {
+
+       /** mCreateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 startActivity(new Intent(getApplicationContext(),Register.class));
 
             }
 
 
 
-        });
+        }); **/
 
         forgotTextLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,5 +140,19 @@ public class Login extends AppCompatActivity {
         });
 
 
+
+
     }
+
+    public void swapToRegister(View view){
+        Intent intent = new Intent(this, Register.class);
+        startActivity(intent);
+
+
+    }
+
+
+
+
+
 }
