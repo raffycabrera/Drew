@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void swapToMainMenu(View view){
+    public void loginPressed(View view){
         Intent intent = new Intent(this, MainMenu.class);
         startActivity(intent);
 
