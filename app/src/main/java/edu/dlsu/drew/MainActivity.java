@@ -13,6 +13,8 @@ import android.widget.EditText;
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "edu.dlsu.DREW.MESSAGE";
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,5 +30,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
+    public void swapToMainMenu(View view){
+        Intent intent = new Intent(this, MainMenu.class);
+        startActivity(intent);
+
+    }
+
 
 }

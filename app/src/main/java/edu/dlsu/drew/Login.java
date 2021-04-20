@@ -51,24 +51,6 @@ public class Login extends AppCompatActivity {
         mCreateBtn = findViewById(R.id.signupButton);
 
 
-        /**
-        mLoginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String email = mEmail.getText().toString().trim();
-                String password = mPassword.getText().toString().trim();
-
-
-                if(TextUtils.isEmpty(email)){
-                    mEmail.setError("Email is Required.");
-                    return;
-                }
-
-                if(TextUtils.isEmpty(password)){
-                    mPassword.setError("Password is Required.");
-                    return;
-                }
 
                 if(password.length() < 6){
                     mPassword.setError("Password Must be >= 6 Characters");
@@ -165,63 +147,13 @@ public class Login extends AppCompatActivity {
         startActivity(intent);
     }
 
-
-    public void updateUI(FirebaseUser account){
-
-        if(account != null){
-            Toast.makeText(this,"U Signed In successfully",Toast.LENGTH_LONG).show();
-            startActivity(new Intent(this,MainActivity.class));
-
-        }else {
-            Toast.makeText(this,"U Didnt signed in",Toast.LENGTH_LONG).show();
-        }
-
-    }
-
-
-
     public void loginPressed(View view){
 
-        String email = mEmail.getText().toString().trim();
-        String password = mPassword.getText().toString().trim();
-
-        if(TextUtils.isEmpty(email)){
-            mEmail.setError("Email is Required.");
-            return;
-        }
-
-        if(TextUtils.isEmpty(password)){
-            mPassword.setError("Password is Required.");
-            return;
-        }
-        fAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = fAuth.getCurrentUser();
-
-                            updateUI(user);
-
-
-
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(Login.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            updateUI(null);
-                        }
-                    }
-                });
 
 
 
 
     }
-
 
 
 }
