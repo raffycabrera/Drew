@@ -28,7 +28,7 @@ public class Register extends Activity {
     private FirebaseAuth mAuth;
     // [END declare_auth]
 
-    EditText mFullName,mEmail,mPassword,mPhone;
+    EditText mFullName,mEmail,mPassword,mPasswordConfirm;
     Button mRegisterBtn;
     TextView mLoginBtn;
     String userID;
@@ -47,7 +47,7 @@ public class Register extends Activity {
         mEmail      = findViewById(R.id.Email);
         mPassword   = findViewById(R.id.password);
         mRegisterBtn= findViewById(R.id.registerBtn);
-
+        mPasswordConfirm = findViewById(R.id.password2);
 
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
@@ -147,9 +147,13 @@ public class Register extends Activity {
         final String email = mEmail.getText().toString().trim();
         String password = mPassword.getText().toString().trim();
         final String fullName = mFullName.getText().toString();
+        String passwordConfirm = mPasswordConfirm.getText().toString().trim();
         if(email.isEmpty() || password.isEmpty() || fullName.isEmpty())
         {
             alert("Alert!","Please fill in all required fields.", "OK");
+        }
+        else if(!password.equals(passwordConfirm)){
+            alert("Alert!","Please make sure passwords match.","OK");
         }
         else {
             createAccount(email, password);
