@@ -3,12 +3,12 @@ package edu.dlsu.drew;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,7 +19,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Register extends Activity {
 
@@ -30,7 +29,7 @@ public class Register extends Activity {
 
     EditText mFullName,mEmail,mPassword,mPasswordConfirm;
     Button mRegisterBtn;
-    TextView mLoginBtn;
+    TextView mBackBtn;
     String userID;
 
 
@@ -48,10 +47,16 @@ public class Register extends Activity {
         mPassword   = findViewById(R.id.password);
         mRegisterBtn= findViewById(R.id.registerBtn);
         mPasswordConfirm = findViewById(R.id.password2);
+        mBackBtn = findViewById(R.id.backToSignIn);
 
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
-
+        mBackBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),Login.class));
+            }
+        });
 
 
 
@@ -163,13 +168,15 @@ public class Register extends Activity {
     private void alert(String title, String message, String positiveButton ){
         AlertDialog alert = new AlertDialog.Builder(Register.this).setTitle(title).setMessage(message).setPositiveButton(positiveButton, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface dialog, int x) {
                 dialog.dismiss();
             }
         }).create();
         alert.show();
     }
 
+    public void loginPressed(View view){
 
+    }
 
 }

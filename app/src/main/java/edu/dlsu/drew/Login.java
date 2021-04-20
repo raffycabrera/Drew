@@ -99,7 +99,7 @@ public class Login extends AppCompatActivity {
 
 
 
-
+        //swaps to register  activity when pressed
        mCreateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
