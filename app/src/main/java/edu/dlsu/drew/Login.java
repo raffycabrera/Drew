@@ -39,7 +39,7 @@ public class Login extends AppCompatActivity {
         mPassword = findViewById(R.id.password);
         fAuth = FirebaseAuth.getInstance();
         mLoginBtn = findViewById(R.id.loginButton);
-        mCreateBtn = findViewById(R.id.createButton);
+        mCreateBtn = findViewById(R.id.signupButton);
 
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +84,7 @@ public class Login extends AppCompatActivity {
         });
 
 
-       /** mCreateBtn.setOnClickListener(new View.OnClickListener() {
+       mCreateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -95,7 +95,7 @@ public class Login extends AppCompatActivity {
 
 
 
-        }); **/
+        });
 
         forgotTextLink.setOnClickListener(new View.OnClickListener() {
             @Override

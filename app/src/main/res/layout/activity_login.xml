@@ -59,7 +59,7 @@
         app:rippleColor="#FFFFFF" />
 
     <Button
-        android:id="@+id/createButton"
+        android:id="@+id/signupButton"
         android:layout_width="209dp"
         android:layout_height="41dp"
         android:layout_marginTop="20dp"
