@@ -3,6 +3,8 @@ package edu.dlsu.drew;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -62,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
 
         }
+        else{
+            alert("Alert!","Incorrect Information", "OK");
+        }
     }
 
 
@@ -89,6 +94,14 @@ public class MainActivity extends AppCompatActivity {
             // [END sign_in_with_email]
         }
 
-
+    private void alert(String title, String message, String positiveButton ){
+        AlertDialog alert = new AlertDialog.Builder(MainActivity.this).setTitle(title).setMessage(message).setPositiveButton(positiveButton, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int x) {
+                dialog.dismiss();
+            }
+        }).create();
+        alert.show();
+    }
 
 }
