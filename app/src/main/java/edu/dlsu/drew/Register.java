@@ -1,6 +1,8 @@
 package edu.dlsu.drew;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -93,6 +95,7 @@ public class Register extends Activity {
                         }
                     }
                 });
+        alert("Congratulations!"," Account successfully created.","OK");
         // [END create_user_with_email]
     }
 
@@ -144,10 +147,23 @@ public class Register extends Activity {
         final String email = mEmail.getText().toString().trim();
         String password = mPassword.getText().toString().trim();
         final String fullName = mFullName.getText().toString();
+        if(email.isEmpty() || password.isEmpty() || fullName.isEmpty())
+        {
+            alert("Alert!","Please fill in all required fields.", "OK");
+        }
+        else {
+            createAccount(email, password);
+        }
 
-        createAccount(email,password);
-
-
+    }
+    private void alert(String title, String message, String positiveButton ){
+        AlertDialog alert = new AlertDialog.Builder(Register.this).setTitle(title).setMessage(message).setPositiveButton(positiveButton, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).create();
+        alert.show();
     }
 
 
