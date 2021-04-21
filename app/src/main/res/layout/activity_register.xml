@@ -13,6 +13,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="124dp"
         android:text="Already Registered? Sign here!"
+
+        android:onClick="backToSignInPressed"
+
         android:textColor="#F67280"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

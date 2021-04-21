@@ -30,10 +30,7 @@ public class Register extends AppCompatActivity {
 
     EditText mFullName,mEmail,mPassword,mPasswordConfirm;
     Button mRegisterBtn;
-    TextView mBackBtn;
-    String userID;
-
-
+    TextView mBackBtn, backToSignIn;
 
 
     @Override
@@ -76,6 +73,12 @@ public class Register extends AppCompatActivity {
     // [END on_start_check_user]
 
 
+    public void backToSignInPressed(View view){
+
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+
+    }
 
 
 
