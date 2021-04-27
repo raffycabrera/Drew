@@ -16,10 +16,19 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Register extends AppCompatActivity {
 
@@ -27,11 +36,13 @@ public class Register extends AppCompatActivity {
     // [START declare_auth]
     private FirebaseAuth mAuth;
     // [END declare_auth]
-
+    FirebaseFirestore fStore;
+    private FirebaseDatabase db = FirebaseDatabase.getInstance();
+    private DatabaseReference root = db.getReference();
     EditText mFullName,mEmail,mPassword,mPasswordConfirm;
     Button mRegisterBtn;
     TextView mBackBtn, backToSignIn;
-
+    String userID;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,6 +60,7 @@ public class Register extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
+        fStore = FirebaseFirestore.getInstance();
         mBackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,7 +96,7 @@ public class Register extends AppCompatActivity {
 
 
 
-    private void createAccount(String email, String password) {
+    private void createAccount(String email, String password, String fullName) {
         // [START create_user_with_email]
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -94,6 +106,29 @@ public class Register extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            HashMap<String, String> userMap = new HashMap<>();
+                            userMap.put("name", fullName);
+                            userMap.put("email", email);
+                            root.push().setValue(userMap);
+
+                          /*  userID = mAuth.getCurrentUser().getUid();
+
+                            DocumentReference documentReference = fStore.collection("users").document(userID);
+                            Map<String,Object> userList = new HashMap<>();
+                            userList.put("fName",mFullName);
+                            userList.put("fEmail",mEmail);
+
+                            documentReference.set(userList).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG,"onSuccess: user Profile is created for" + userID);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d(TAG,"onFailure: "+e.toString());
+                                }
+                            });*/
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -165,7 +200,7 @@ public class Register extends AppCompatActivity {
             alert("Alert!","Please make sure passwords match.","OK");
         }
         else {
-            createAccount(email, password);
+            createAccount(email, password, fullName);
         }
 
     }
