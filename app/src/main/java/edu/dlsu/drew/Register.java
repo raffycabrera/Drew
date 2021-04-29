@@ -106,11 +106,21 @@ public class Register extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            /*
+                            FirebaseAuth auth = FirebaseAuth.getInstance();
+                            user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Log.d(TAG, "Email sent.");
+                                            }
+                                        }
+                                    });*/
                             HashMap<String, String> userMap = new HashMap<>();
                             userMap.put("name", fullName);
                             userMap.put("email", email);
                             root.push().setValue(userMap);
-
+                            sendEmailVerification();
                           /*  userID = mAuth.getCurrentUser().getUid();
 
                             DocumentReference documentReference = fStore.collection("users").document(userID);
@@ -133,13 +143,13 @@ public class Register extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(Register.this, "Authentication failed.",
+                            Toast.makeText(Register.this, "Email verification sent.",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
                     }
                 });
-        alert("Congratulations!"," Account successfully created.","OK");
+        alert("Congratulations!"," Account created. Please check your email for verification to finalize creation","OK");
         // [END create_user_with_email]
     }
 
