@@ -37,7 +37,7 @@
         android:id="@+id/password"
         android:layout_width="210dp"
         android:layout_height="38dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="44dp"
         android:ems="10"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,10 +49,10 @@
         android:id="@+id/loginButton"
         android:layout_width="127dp"
         android:layout_height="36dp"
-        android:layout_marginTop="20dp"
-        android:text="LOGIN"
-
+        android:layout_marginTop="4dp"
         android:onClick="loginPressed"
+
+        android:text="LOGIN"
 
         android:textColorHighlight="#FFFFFF"
         app:backgroundTint="#F67280"
@@ -65,10 +65,27 @@
         android:id="@+id/signupButton"
         android:layout_width="209dp"
         android:layout_height="41dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="4dp"
+        android:onClick="swapToRegister"
+
         android:text="New User? Sign Up!"
 
-        android:onClick="swapToRegister"
+        android:textColor="#FFFFFF"
+        app:backgroundTint="#F67280"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginButton"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/resetPassword"
+        android:layout_width="209dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="44dp"
+        android:onClick="resetPasswordPressed"
+
+        android:text="Forgot password?"
 
         android:textColor="#FFFFFF"
         app:backgroundTint="#F67280"
@@ -106,7 +123,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="12dp"
         android:text="Password"
         android:textColor="#000000"
         android:textColorHint="#FFFFFF"
