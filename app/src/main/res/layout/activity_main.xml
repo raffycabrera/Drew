@@ -23,6 +23,9 @@
         android:layout_marginTop="8dp"
         android:background="?selectableItemBackgroundBorderless"
         android:scaleType="fitXY"
+
+        android:onClick="swapToMap"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.516"
         app:layout_constraintStart_toStartOf="parent"
