@@ -2,6 +2,8 @@ package edu.dlsu.drew;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "edu.dlsu.DREW.MESSAGE";
     private static final String TAG = "EmailPassword";
     private FirebaseAuth fAuth;
-
 
     EditText mEmail,mPassword;
 
