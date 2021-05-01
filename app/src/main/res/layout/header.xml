@@ -4,7 +4,7 @@
     android:layout_width="300dp"
     android:layout_height="200dp"
     android:orientation="vertical"
-    android:background="@mipmap/blue_fg"
+    android:background="@mipmap/bluebanner"
     android:gravity="bottom">
 
 </LinearLayout>
