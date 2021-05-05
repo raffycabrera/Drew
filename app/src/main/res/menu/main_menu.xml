@@ -17,7 +17,8 @@
                 <item
                     android:title="View Map"
                     android:id="@+id/nav_map"
-                    android:icon="@drawable/map_icon"/>
+                    android:icon="@drawable/map_icon"
+                    />
 
                 <item
                     android:title="Account Options"
