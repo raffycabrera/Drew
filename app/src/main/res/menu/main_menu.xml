@@ -2,6 +2,11 @@
 <menu xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <org.osmdroid.views.MapView
+        android:id="@+id/map"
+        android:layout_width="fill_parent"
+        android:layout_height="531dp" />
+
     <item android:title="Options">
 
         <menu>
@@ -15,8 +20,8 @@
                     android:id="@+id/nav_notifications"
                     android:icon="@drawable/notification_icon"/>
                 <item
-                    android:title="View Map"
-                    android:id="@+id/nav_map"
+                    android:title="Add event"
+                    android:id="@+id/nav_record"
                     android:icon="@drawable/map_icon"
                     />
 
