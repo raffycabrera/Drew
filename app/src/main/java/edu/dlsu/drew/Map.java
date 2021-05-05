@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -15,12 +16,15 @@ import android.widget.Spinner;
 
 import androidx.core.app.ActivityCompat;
 
+import org.osmdroid.bonuspack.location.NominatimPOIProvider;
+import org.osmdroid.bonuspack.location.POI;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.Projection;
+import org.osmdroid.views.overlay.FolderOverlay;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Overlay;
@@ -32,6 +36,9 @@ public class Map extends Activity {
     MapView map = null;
     MapController mMapController;
     // Storage Permissions
+
+
+
 
 
     @Override public void onCreate(Bundle savedInstanceState) {
@@ -71,6 +78,29 @@ public class Map extends Activity {
         mMapController.setCenter(startPoint);
         //mMapController.animateTo(startPoint);
         mMapController.setZoom(7);
+
+
+
+
+        NominatimPOIProvider poiProvider = new NominatimPOIProvider("OSMBonusPackTutoUserAgent");
+        ArrayList<POI> pois = poiProvider.getPOICloseTo(startPoint, "hospital", 50, 0.5);
+        FolderOverlay poiMarkers = new FolderOverlay(this);
+        map.getOverlays().add(poiMarkers);
+        Drawable poiIcon = getResources().getDrawable(R.drawable.home_icon);
+        for (POI poi:pois){
+            Marker poiMarker = new Marker(map);
+            poiMarker.setTitle(poi.mType);
+            poiMarker.setSnippet(poi.mDescription);
+            poiMarker.setPosition(poi.mLocation);
+            poiMarker.setIcon(poiIcon);
+            /*
+            if (poi.mThumbnail != null){
+                poiItem.setImage(new BitmapDrawable(poi.mThumbnail));
+            } */
+            poiMarkers.add(poiMarker);
+        }
+
+
 
         Marker startMarker = new Marker(map);
         startMarker.setPosition(startPoint);
