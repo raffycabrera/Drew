@@ -140,7 +140,8 @@ public class Map extends Activity {
                 System.out.println("- Latitude = " + latitude + ", Longitude = " + longitude );
 
                 //setting event to be placed onto firebase
-                setEvent("name",longitude,latitude);
+                String name = dropdown.getSelectedItem().toString();
+                setEvent(name,longitude,latitude);
                 //@james can you link name to the spinner
 
 
@@ -173,9 +174,8 @@ public class Map extends Activity {
     public void saveMarker(View view){
 
 
-    //Event event = new Event(name, longitude, latitude);
-
-    mDatabase.child("Coordinates").child(event.getName()).setValue(event);
+    //Event event = new Event(name, longitude, latitude)
+        mDatabase.child("Coordinates").push().setValue(event);
 
 
 
