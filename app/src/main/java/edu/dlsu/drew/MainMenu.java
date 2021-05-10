@@ -35,6 +35,7 @@ import org.osmdroid.views.overlay.FolderOverlay;
 import org.osmdroid.views.overlay.Marker;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainMenu extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -84,15 +85,82 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
 
 
 
-        startMarker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker, MapView mapView) {
-                if (!clicked){
+        //this is the first option it has a function that draws markers
+        /**
+         public void addMarker(GeoPoint center) {
+         MarkerOptions options = new MarkerOptions();
+         Marker marker = new Marker(map);
+         options.position(center);
+         options.anchor( Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+
+         Marker marker = map.AddMarker(options);
+         }try {
+         while (cursor.moveToNext()) {
+         GeoPoint point = new GeoPoint(cursor.getLong("lat"), cursor.getLong("lng"));
+         addMarker(point);
+         }
+         } finally {
+         cursor.close();
+         }
+         **/
+
+        List<GeoPoint> geoPoints = new ArrayList<>();
+        double [][] xylist = new double[20][20];
+
+
+        //now find a way to get the longitude and lat from firebase
+        //instead of hard coding make this onto a nested for loop
+
+        xylist[0][0]=12.8797;
+        xylist[0][1]=122.7740;
+
+        xylist[1][0]=11.8797;
+        xylist[1][1]=122.7740;
+
+        xylist[2][0]=10.8797;
+        xylist[2][1]=122.7740;
+
+        xylist[3][0]=9.8797;
+        xylist[3][1]=122.7740;
+
+        xylist[4][0]=13.8797;
+        xylist[4][1]=122.7740;
+
+
+//find a way to make a counter
+        for(int i =0 ; i<xylist.length;i++)
+        {
+            if (xylist[i][0] == 0 && xylist[i][1]==0){
+                break;
+            }else{
+                GeoPoint geoPoint = new GeoPoint(xylist[i][0],xylist[i][1]);
+                geoPoints.add(geoPoint);
+                //System.out.println(i);
+            }
+        }
+
+        //System.out.println(geoPoints);
+
+        for(int i =0 ; i<geoPoints.size();i++)
+        {
+            Marker marker = new Marker(map);
+            marker.setPosition(geoPoints.get(i));
+            System.out.println(i);
+
+            //get the longitude and latitude to make a geopoint permanent
+            GeoPoint scanGeoPoint = new GeoPoint(xylist[i][0],xylist[i][1]);
+
+
+            marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker, MapView mapView) {
+
+                    //if (!clicked){
 
                     marker.showInfoWindow();
                     mapView.getController().animateTo(marker.getPosition());
                     NominatimPOIProvider poiProvider = new NominatimPOIProvider("OSMBonusPackTutoUserAgent");
-                    ArrayList<POI> pois = poiProvider.getPOICloseTo(startPoint, "Hospital", 50, 0.5);
+                    ArrayList<POI> pois = poiProvider.getPOICloseTo(scanGeoPoint, "Hospital", 25, 0.5);
                     FolderOverlay poiMarkers = new FolderOverlay(getApplicationContext());
                     map.getOverlays().add(poiMarkers);
                     Drawable poiIcon = getResources().getDrawable(R.drawable.home_icon);
@@ -102,30 +170,28 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                         poiMarker.setSnippet(poi.mDescription);
                         poiMarker.setPosition(poi.mLocation);
                         poiMarker.setIcon(poiIcon);
-            /*
-            if (poi.mThumbnail != null){
-                poiItem.setImage(new BitmapDrawable(poi.mThumbnail));
-            } */
+
                         poiMarkers.add(poiMarker);
                     }
                     long speed = 3;
                     mMapController.animateTo(startPoint,9.00,speed);
 
-                    clicked = true;
+
+                    // }
+                    /**
+                     else {
+                     mMapController.setCenter(startPoint);
+                     mMapController.setZoom(7);
+                     //map.getOverlays().clear();
+
+                     }
+                     **/
                     return true;
+                }});
 
-                } else {
-
-                    mMapController.setCenter(startPoint);
-                    mMapController.setZoom(7);
-                    map.getOverlays().clear();
-                    // use the function to create the markers
-
-                }
-                return true;
-            }});
-
-
+            map.getOverlays().add(marker);
+        }
+        map.invalidate();
 
     }
 
