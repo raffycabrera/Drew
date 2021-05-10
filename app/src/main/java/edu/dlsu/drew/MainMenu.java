@@ -23,6 +23,7 @@ import android.widget.Toast;
 import androidx.core.view.GravityCompat;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 
 import org.osmdroid.bonuspack.location.NominatimPOIProvider;
 import org.osmdroid.bonuspack.location.POI;
@@ -45,7 +46,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     MapView map = null;
     MapController mMapController;
     boolean clicked = false;
-
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,7 +164,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                     ArrayList<POI> pois = poiProvider.getPOICloseTo(scanGeoPoint, "Hospital", 25, 0.5);
                     FolderOverlay poiMarkers = new FolderOverlay(getApplicationContext());
                     map.getOverlays().add(poiMarkers);
-                    Drawable poiIcon = getResources().getDrawable(R.drawable.home_icon);
+                    Drawable poiIcon = getResources().getDrawable(R.drawable.hospital_icon);
                     for (POI poi:pois){
                         Marker poiMarker = new Marker(map);
                         poiMarker.setTitle(poi.mType);
@@ -188,10 +189,22 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                      **/
                     return true;
                 }});
-
+            //have some if statements here depending on what type of calamity it is
+            startMarker.setIcon(getResources().getDrawable(R.drawable.ic_cloud));
+            startMarker.setTitle("Typhoon here");
             map.getOverlays().add(marker);
         }
         map.invalidate();
+
+    }
+
+//this will be the function to get the longitude and latitude and return a double 2d array
+    public double [][] getData(){
+        double [][] xylist = new double[20][20];
+
+
+
+        return xylist;
 
     }
 

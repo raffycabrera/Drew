@@ -41,6 +41,7 @@ public class Map extends Activity {
     MapController mMapController;
     private DatabaseReference mDatabase;
     // Storage Permissions
+    Event event = new Event();
 
 
 
@@ -85,7 +86,7 @@ public class Map extends Activity {
         mMapController.setZoom(7);
 
 
-
+/**
 
         NominatimPOIProvider poiProvider = new NominatimPOIProvider("OSMBonusPackTutoUserAgent");
         ArrayList<POI> pois = poiProvider.getPOICloseTo(startPoint, "hospital", 50, 0.5);
@@ -98,21 +99,12 @@ public class Map extends Activity {
             poiMarker.setSnippet(poi.mDescription);
             poiMarker.setPosition(poi.mLocation);
             poiMarker.setIcon(poiIcon);
-            /*
-            if (poi.mThumbnail != null){
-                poiItem.setImage(new BitmapDrawable(poi.mThumbnail));
-            } */
+
             poiMarkers.add(poiMarker);
-        }
+
+            **/
 
 
-
-        Marker startMarker = new Marker(map);
-        startMarker.setPosition(startPoint);
-        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        map.getOverlays().add(startMarker);
-        startMarker.setIcon(getResources().getDrawable(R.drawable.ic_cloud));
-        startMarker.setTitle("Typhoon here");
 
 //get the spinner from the xml.
         Spinner dropdown = findViewById(R.id.spinner1);
@@ -132,16 +124,30 @@ public class Map extends Activity {
             }
             @Override
             public boolean onSingleTapConfirmed(final MotionEvent e, final MapView mapView) {
+
+
                 mDatabase = FirebaseDatabase.getInstance().getReference().child("Coordinates");
 
                 final Drawable marker = getApplicationContext().getResources().getDrawable(R.drawable.ic_cloud);
                 Projection proj = mapView.getProjection();
                 GeoPoint loc = (GeoPoint) proj.fromPixels((int)e.getX(), (int)e.getY());
-                String longitude = Double.toString(((double)loc.getLongitudeE6())/1000000);
-                String latitude = Double.toString(((double)loc.getLatitudeE6())/1000000);
+
+
+
+
+                 String longitude = Double.toString(((double)loc.getLongitudeE6())/1000000);
+                 String latitude = Double.toString(((double)loc.getLatitudeE6())/1000000);
+                System.out.println("- Latitude = " + latitude + ", Longitude = " + longitude );
+
+                //setting event to be placed onto firebase
+                setEvent("name",longitude,latitude);
+
+
                 mDatabase.push().setValue(latitude);
                 mDatabase.push().setValue(longitude);
-                System.out.println("- Latitude = " + latitude + ", Longitude = " + longitude );
+
+
+
                 ArrayList<OverlayItem> overlayArray = new ArrayList<OverlayItem>();
                 OverlayItem mapItem = new OverlayItem("", "", new GeoPoint((((double)loc.getLatitudeE6())/1000000), (((double)loc.getLongitudeE6())/1000000)));
                 mapItem.setMarker(marker);
@@ -150,15 +156,13 @@ public class Map extends Activity {
                     anotherItemizedIconOverlay = new ItemizedIconOverlay<OverlayItem>(getApplicationContext(), overlayArray,null);
                     mapView.getOverlays().add(anotherItemizedIconOverlay);
                     mapView.invalidate();
-                    System.out.println(longitude);
-                    System.out.println(latitude);
+
                 }else{
                     mapView.getOverlays().remove(anotherItemizedIconOverlay);
                     mapView.invalidate();
                     anotherItemizedIconOverlay = new ItemizedIconOverlay<OverlayItem>(getApplicationContext(), overlayArray,null);
                     mapView.getOverlays().add(anotherItemizedIconOverlay);
-                    System.out.println(longitude);
-                    System.out.println(latitude);
+
                 }
                 //      dlgThread();
                 return true;
@@ -167,11 +171,28 @@ public class Map extends Activity {
         map.getOverlays().add(touchOverlay);
 
 
-
     }
+    //gonna put the fire base saving here just put this on an on click in a save button
 public void saveMarker(View view){
 
+
+    //Event event = new Event(name, longitude, latitude);
+
+    mDatabase.child("Coordinates").child(event.getName()).setValue(event);
+
+
+
 }
+
+//this will set the events stuff (global variable ) so that when you click savemarker it just shows the object
+public void setEvent (String name, String longi, String lati){
+
+        event.setName(name);
+        event.setLatitude(lati);
+        event.setLongitude(longi);
+
+}
+
     public void onResume(){
         super.onResume();
         //this will refresh the osmdroid configuration on resuming.

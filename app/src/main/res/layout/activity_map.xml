@@ -20,7 +20,9 @@
         android:id="@+id/saveMarker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save Marker"
-        android:onClick="saveMarker"/>
+        android:onClick="saveMarker"
+
+
+        android:text="Save Marker" />
 
 </LinearLayout>
