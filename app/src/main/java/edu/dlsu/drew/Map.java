@@ -126,7 +126,7 @@ public class Map extends Activity {
             public boolean onSingleTapConfirmed(final MotionEvent e, final MapView mapView) {
 
 
-                mDatabase = FirebaseDatabase.getInstance().getReference().child("Coordinates");
+                mDatabase = FirebaseDatabase.getInstance().getReference();
 
                 final Drawable marker = getApplicationContext().getResources().getDrawable(R.drawable.ic_cloud);
                 Projection proj = mapView.getProjection();
@@ -141,10 +141,7 @@ public class Map extends Activity {
 
                 //setting event to be placed onto firebase
                 setEvent("name",longitude,latitude);
-
-
-                mDatabase.push().setValue(latitude);
-                mDatabase.push().setValue(longitude);
+                //@james can you link name to the spinner
 
 
 
@@ -173,7 +170,7 @@ public class Map extends Activity {
 
     }
     //gonna put the fire base saving here just put this on an on click in a save button
-public void saveMarker(View view){
+    public void saveMarker(View view){
 
 
     //Event event = new Event(name, longitude, latitude);
@@ -185,7 +182,7 @@ public void saveMarker(View view){
 }
 
 //this will set the events stuff (global variable ) so that when you click savemarker it just shows the object
-public void setEvent (String name, String longi, String lati){
+    public void setEvent (String name, String longi, String lati){
 
         event.setName(name);
         event.setLatitude(lati);

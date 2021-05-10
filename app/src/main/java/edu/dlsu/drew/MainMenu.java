@@ -115,6 +115,9 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         xylist[0][0]=12.8797;
         xylist[0][1]=122.7740;
 
+
+        //xylist[i][j] = event.getlongitude()
+
         xylist[1][0]=11.8797;
         xylist[1][1]=122.7740;
 
