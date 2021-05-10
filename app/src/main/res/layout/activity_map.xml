@@ -16,4 +16,11 @@
         android:background="@android:drawable/btn_dropdown"
         android:spinnerMode="dropdown"/>
 
+    <Button
+        android:id="@+id/saveMarker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save Marker"
+        android:onClick="saveMarker"/>
+
 </LinearLayout>

@@ -11,10 +11,14 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import androidx.core.app.ActivityCompat;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.osmdroid.bonuspack.location.NominatimPOIProvider;
 import org.osmdroid.bonuspack.location.POI;
@@ -35,6 +39,7 @@ import java.util.ArrayList;
 public class Map extends Activity {
     MapView map = null;
     MapController mMapController;
+    private DatabaseReference mDatabase;
     // Storage Permissions
 
 
@@ -127,12 +132,15 @@ public class Map extends Activity {
             }
             @Override
             public boolean onSingleTapConfirmed(final MotionEvent e, final MapView mapView) {
+                mDatabase = FirebaseDatabase.getInstance().getReference().child("Coordinates");
 
                 final Drawable marker = getApplicationContext().getResources().getDrawable(R.drawable.ic_cloud);
                 Projection proj = mapView.getProjection();
                 GeoPoint loc = (GeoPoint) proj.fromPixels((int)e.getX(), (int)e.getY());
                 String longitude = Double.toString(((double)loc.getLongitudeE6())/1000000);
                 String latitude = Double.toString(((double)loc.getLatitudeE6())/1000000);
+                mDatabase.push().setValue(latitude);
+                mDatabase.push().setValue(longitude);
                 System.out.println("- Latitude = " + latitude + ", Longitude = " + longitude );
                 ArrayList<OverlayItem> overlayArray = new ArrayList<OverlayItem>();
                 OverlayItem mapItem = new OverlayItem("", "", new GeoPoint((((double)loc.getLatitudeE6())/1000000), (((double)loc.getLongitudeE6())/1000000)));
@@ -161,7 +169,9 @@ public class Map extends Activity {
 
 
     }
+public void saveMarker(View view){
 
+}
     public void onResume(){
         super.onResume();
         //this will refresh the osmdroid configuration on resuming.
