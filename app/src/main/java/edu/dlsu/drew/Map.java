@@ -2,7 +2,9 @@ package edu.dlsu.drew;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -12,6 +14,7 @@ import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -35,6 +38,7 @@ import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Map extends Activity {
     MapView map = null;
@@ -42,7 +46,7 @@ public class Map extends Activity {
     private DatabaseReference mDatabase;
     // Storage Permissions
     Event event = new Event();
-
+    String disaster, icon;
 
 
 
@@ -109,13 +113,24 @@ public class Map extends Activity {
 //get the spinner from the xml.
         Spinner dropdown = findViewById(R.id.spinner1);
 //create a list of items for the spinner.
-        String[] items = new String[]{"Fire", "Earthquake", "Typhoon", "Flood"};
+        String[] items = new String[]{"Fire", "Earthquake", "Typhoon", "Flood", "Covid","Landslide"};
 //create an adapter to describe how the items are displayed, adapters are used in several places in android.
 //There are multiple variations of this, but this is the basic variant.
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
 //set the spinners adapter to the previously created one.
         dropdown.setAdapter(adapter);
+        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                disaster = dropdown.getSelectedItem().toString();
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
         Overlay touchOverlay = new Overlay(this){
             ItemizedIconOverlay<OverlayItem> anotherItemizedIconOverlay = null;
             @Override
@@ -124,14 +139,32 @@ public class Map extends Activity {
             }
             @Override
             public boolean onSingleTapConfirmed(final MotionEvent e, final MapView mapView) {
-
-
                 mDatabase = FirebaseDatabase.getInstance().getReference();
-
-                final Drawable marker = getApplicationContext().getResources().getDrawable(R.drawable.ic_cloud);
                 Projection proj = mapView.getProjection();
                 GeoPoint loc = (GeoPoint) proj.fromPixels((int)e.getX(), (int)e.getY());
 
+                Drawable marker = getApplicationContext().getResources().getDrawable(R.drawable.ic_cloud);
+                if (disaster.equals("Fire")){
+                    marker = getApplicationContext().getResources().getDrawable(R.drawable.fire_icon);
+
+                }
+                else if (disaster.equals("Covid")){
+                    marker = getApplicationContext().getResources().getDrawable(R.drawable.covid_icon);
+                }
+                else if (disaster.equals("Flood")){
+                    marker = getApplicationContext().getResources().getDrawable(R.drawable.flood_icon);
+                }
+
+                else if (disaster.equals("Landslide")){
+                    marker = getApplicationContext().getResources().getDrawable(R.drawable.landslidewarning_icon);
+                }
+
+                else if (disaster.equals("Earthquake")){
+                    marker = getApplicationContext().getResources().getDrawable(R.drawable.earthquake_icon);
+                }
+                else if (disaster.equals("Typhoon")){
+                    marker = getApplicationContext().getResources().getDrawable(R.drawable.typhoon_icon);
+                }
 
 
 
@@ -139,10 +172,11 @@ public class Map extends Activity {
                  String latitude = Double.toString(((double)loc.getLatitudeE6())/1000000);
                 System.out.println("- Latitude = " + latitude + ", Longitude = " + longitude );
 
+                // get the date and time
+                long millis=System.currentTimeMillis();
+                java.util.Date date=new java.util.Date(millis);
                 //setting event to be placed onto firebase
-                String name = dropdown.getSelectedItem().toString();
-                setEvent(name,longitude,latitude);
-                //@james can you link name to the spinner
+                setEvent(disaster,longitude,latitude,date);
 
 
 
@@ -176,17 +210,19 @@ public class Map extends Activity {
 
     //Event event = new Event(name, longitude, latitude)
         mDatabase.child("Coordinates").push().setValue(event);
+        alert("Success!","Marker has been saved to the database.","OK");
 
 
 
 }
 
 //this will set the events stuff (global variable ) so that when you click savemarker it just shows the object
-    public void setEvent (String name, String longi, String lati){
+    public void setEvent (String name, String longi, String lati,Date date){
 
         event.setName(name);
         event.setLatitude(lati);
         event.setLongitude(longi);
+        event.setDate(date);
 
 }
 
@@ -206,5 +242,14 @@ public class Map extends Activity {
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //Configuration.getInstance().save(this, prefs);
         map.onPause();  //needed for compass, my location overlays, v6.0.0 and up
+    }
+    private void alert(String title, String message, String positiveButton ){
+        AlertDialog alert = new AlertDialog.Builder(Map.this).setTitle(title).setMessage(message).setPositiveButton(positiveButton, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int x) {
+                dialog.dismiss();
+            }
+        }).create();
+        alert.show();
     }
 }

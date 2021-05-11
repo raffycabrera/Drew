@@ -1,12 +1,13 @@
 package edu.dlsu.drew;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,19 +23,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class Register extends AppCompatActivity {
 
@@ -48,7 +45,7 @@ public class Register extends AppCompatActivity {
     EditText mFullName,mEmail,mPassword,mPasswordConfirm;
     Button mRegisterBtn;
     TextView mBackBtn, backToSignIn;
-    String userID;
+    String userID, accountRole;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,10 +60,25 @@ public class Register extends AppCompatActivity {
         mRegisterBtn= findViewById(R.id.registerBtn);
         mPasswordConfirm = findViewById(R.id.password2);
         mBackBtn = findViewById(R.id.backToSignIn);
-
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
         fStore = FirebaseFirestore.getInstance();
+        Spinner roleSpinner = findViewById(R.id.accountRole);
+        String[] accountRoleList= new String[]{"Basic", "Responder", "Administrator"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, accountRoleList);
+        roleSpinner.setAdapter(adapter);
+        roleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                accountRole = roleSpinner.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
         mBackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,15 +86,7 @@ public class Register extends AppCompatActivity {
             }
         });
 
-        //get the spinner from the xml.
-        Spinner dropdown = findViewById(R.id.spinner2);
-        //create a list of items for the spinner.
-        String[] accounts = new String[]{"Account1", "Account2", "Account3"};
-        //create an adapter to describe how the items are displayed, adapters are used in several places in android.
-//There are multiple variations of this, but this is the basic variant.
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, accounts);
-//set the spinners adapter to the previously created one.
-        dropdown.setAdapter(adapter);
+
 
 
 
@@ -112,7 +116,7 @@ public class Register extends AppCompatActivity {
 
 
 
-    private void createAccount(String email, String password, String fullName) {
+    private void createAccount(String email, String password, String fullName, String accountRole) {
         // [START create_user_with_email]
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -135,7 +139,8 @@ public class Register extends AppCompatActivity {
                             HashMap<String, String> userMap = new HashMap<>();
                             userMap.put("name", fullName);
                             userMap.put("email", email);
-                            root.push().setValue(userMap);
+                            userMap.put("role", accountRole);
+                            root.child("Users").push().setValue(userMap);
                             sendEmailVerification();
                           /*  userID = mAuth.getCurrentUser().getUid();
 
@@ -218,6 +223,7 @@ public class Register extends AppCompatActivity {
         String password = mPassword.getText().toString().trim();
         final String fullName = mFullName.getText().toString();
         String passwordConfirm = mPasswordConfirm.getText().toString().trim();
+
         if(email.isEmpty() || password.isEmpty() || fullName.isEmpty())
         {
             alert("Alert!","Please fill in all required fields.", "OK");
@@ -226,7 +232,7 @@ public class Register extends AppCompatActivity {
             alert("Alert!","Please make sure passwords match.","OK");
         }
         else {
-            createAccount(email, password, fullName);
+            createAccount(email, password, fullName, accountRole);
         }
 
     }
