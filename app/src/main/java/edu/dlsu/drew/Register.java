@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
@@ -23,6 +24,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,6 +34,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.sql.SQLOutput;
 import java.util.HashMap;
 
 public class Register extends AppCompatActivity {
@@ -118,6 +122,43 @@ public class Register extends AppCompatActivity {
 
     private void createAccount(String email, String password, String fullName, String accountRole) {
         // [START create_user_with_email]
+        if (accountRole.equals("Administrator")){
+            EditText adminAuth = new EditText(this);
+            AlertDialog.Builder adminAuthDialogue = new AlertDialog.Builder(this);
+            adminAuthDialogue.setTitle("Create Administrator account?");
+            adminAuth.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            adminAuthDialogue.setMessage("Input administrator account creation password");
+            adminAuthDialogue.setView(adminAuth);
+            adminAuthDialogue.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    String auth = adminAuth.getText().toString();
+                    if (auth.equals("#em!er)ge&nc^2y")){
+                        mAuth.createUserWithEmailAndPassword(email, password);
+                        Log.d(TAG, "createUserWithEmail:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        HashMap<String, String> userMap = new HashMap<>();
+                        userMap.put("name", fullName);
+                        userMap.put("email", email);
+                        userMap.put("role", accountRole);
+                        root.child("Users").push().setValue(userMap);
+                        sendEmailVerification();
+                    }
+                    else{
+                        alert("Alert!","Incorrect Administrator password","OK");
+                    }
+
+                }
+            });
+            adminAuthDialogue.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //close dialogue
+                }
+            });
+            adminAuthDialogue.create().show();
+        }
+        else{
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -172,7 +213,7 @@ public class Register extends AppCompatActivity {
                 });
         alert("Congratulations!"," Account created. Please check your email for verification to finalize creation","OK");
         // [END create_user_with_email]
-    }
+    }}
 
     private void signIn(String email, String password) {
         // [START sign_in_with_email]

@@ -143,7 +143,7 @@ public class Map extends Activity {
                 Projection proj = mapView.getProjection();
                 GeoPoint loc = (GeoPoint) proj.fromPixels((int)e.getX(), (int)e.getY());
 
-                Drawable marker = getApplicationContext().getResources().getDrawable(R.drawable.ic_cloud);
+               Drawable marker = getApplicationContext().getResources().getDrawable(R.drawable.ic_cloud);
                 if (disaster.equals("Fire")){
                     marker = getApplicationContext().getResources().getDrawable(R.drawable.fire_icon);
 
