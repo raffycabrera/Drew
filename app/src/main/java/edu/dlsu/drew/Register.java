@@ -143,6 +143,9 @@ public class Register extends AppCompatActivity {
                         userMap.put("role", accountRole);
                         root.child("Users").push().setValue(userMap);
                         sendEmailVerification();
+                        updateUI(user);
+                        alert("Congratulations!","Administrator Account created. Please check your email for verification to finalize creation","OK");
+
                     }
                     else{
                         alert("Alert!","Incorrect Administrator password","OK");
@@ -167,40 +170,13 @@ public class Register extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            /*
-                            FirebaseAuth auth = FirebaseAuth.getInstance();
-                            user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Log.d(TAG, "Email sent.");
-                                            }
-                                        }
-                                    });*/
+                            String uid = task.getResult().getUser().getUid();
                             HashMap<String, String> userMap = new HashMap<>();
                             userMap.put("name", fullName);
                             userMap.put("email", email);
                             userMap.put("role", accountRole);
-                            root.child("Users").push().setValue(userMap);
+                            root.child("Users").child(uid).setValue(userMap);
                             sendEmailVerification();
-                          /*  userID = mAuth.getCurrentUser().getUid();
-
-                            DocumentReference documentReference = fStore.collection("users").document(userID);
-                            Map<String,Object> userList = new HashMap<>();
-                            userList.put("fName",mFullName);
-                            userList.put("fEmail",mEmail);
-
-                            documentReference.set(userList).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Log.d(TAG,"onSuccess: user Profile is created for" + userID);
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.d(TAG,"onFailure: "+e.toString());
-                                }
-                            });*/
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
