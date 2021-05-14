@@ -46,10 +46,11 @@ public class Register extends AppCompatActivity {
     FirebaseFirestore fStore;
     private FirebaseDatabase db = FirebaseDatabase.getInstance();
     private DatabaseReference root = db.getReference();
-    EditText mFullName,mEmail,mPassword,mPasswordConfirm;
+    EditText mFullName,mEmail,mPassword,mPasswordConfirm, mAdminVerif;
     Button mRegisterBtn;
     TextView mBackBtn, backToSignIn;
     String userID, accountRole;
+    TextView mAdminVerifText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,9 +65,13 @@ public class Register extends AppCompatActivity {
         mRegisterBtn= findViewById(R.id.registerBtn);
         mPasswordConfirm = findViewById(R.id.password2);
         mBackBtn = findViewById(R.id.backToSignIn);
+        mAdminVerif = findViewById(R.id.adminVerif);
+        mAdminVerifText = findViewById(R.id.textView6);
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
         fStore = FirebaseFirestore.getInstance();
+        mAdminVerif.setVisibility(View.INVISIBLE);
+        mAdminVerifText.setVisibility(View.INVISIBLE);
         Spinner roleSpinner = findViewById(R.id.accountRole);
         String[] accountRoleList= new String[]{"Basic", "Responder", "Administrator"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, accountRoleList);
@@ -75,6 +80,14 @@ public class Register extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 accountRole = roleSpinner.getSelectedItem().toString();
+                if (accountRole.equals("Administrator")){
+                    mAdminVerif.setVisibility(View.VISIBLE);
+                    mAdminVerifText.setVisibility(View.VISIBLE);
+                }
+                else if(accountRole.equals("Basic") || accountRole.equals("Responder")){
+                    mAdminVerif.setVisibility(View.INVISIBLE);
+                    mAdminVerifText.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
@@ -89,7 +102,6 @@ public class Register extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(),MainActivity.class));
             }
         });
-
 
 
 
@@ -122,46 +134,6 @@ public class Register extends AppCompatActivity {
 
     private void createAccount(String email, String password, String fullName, String accountRole) {
         // [START create_user_with_email]
-        if (accountRole.equals("Administrator")){
-            EditText adminAuth = new EditText(this);
-            AlertDialog.Builder adminAuthDialogue = new AlertDialog.Builder(this);
-            adminAuthDialogue.setTitle("Create Administrator account?");
-            adminAuth.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-            adminAuthDialogue.setMessage("Input administrator account creation password");
-            adminAuthDialogue.setView(adminAuth);
-            adminAuthDialogue.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    String auth = adminAuth.getText().toString();
-                    if (auth.equals("#em!er)ge&nc^2y")){
-                        mAuth.createUserWithEmailAndPassword(email, password);
-                        Log.d(TAG, "createUserWithEmail:success");
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        HashMap<String, String> userMap = new HashMap<>();
-                        userMap.put("name", fullName);
-                        userMap.put("email", email);
-                        userMap.put("role", accountRole);
-                        root.child("Users").push().setValue(userMap);
-                        sendEmailVerification();
-                        updateUI(user);
-                        alert("Congratulations!","Administrator Account created. Please check your email for verification to finalize creation","OK");
-
-                    }
-                    else{
-                        alert("Alert!","Incorrect Administrator password","OK");
-                    }
-
-                }
-            });
-            adminAuthDialogue.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //close dialogue
-                }
-            });
-            adminAuthDialogue.create().show();
-        }
-        else{
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -189,8 +161,8 @@ public class Register extends AppCompatActivity {
                 });
         alert("Congratulations!"," Account created. Please check your email for verification to finalize creation","OK");
         // [END create_user_with_email]
-    }}
-
+    }
+//}
     private void signIn(String email, String password) {
         // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
@@ -240,13 +212,16 @@ public class Register extends AppCompatActivity {
         String password = mPassword.getText().toString().trim();
         final String fullName = mFullName.getText().toString();
         String passwordConfirm = mPasswordConfirm.getText().toString().trim();
-
+        String adminVerifPass = mAdminVerif.getText().toString().trim();
         if(email.isEmpty() || password.isEmpty() || fullName.isEmpty())
         {
             alert("Alert!","Please fill in all required fields.", "OK");
         }
         else if(!password.equals(passwordConfirm)){
             alert("Alert!","Please make sure passwords match.","OK");
+        }
+        else if(!adminVerifPass.equals("#em!er)ge&nc^2y") && accountRole.equals("Administrator")){
+            alert("Alert!","Incorrect Administrator Verification Password!","OK");
         }
         else {
             createAccount(email, password, fullName, accountRole);
