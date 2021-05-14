@@ -20,6 +20,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.core.view.GravityCompat;
@@ -29,6 +30,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -47,6 +49,7 @@ import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.FolderOverlay;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,11 +63,19 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     MapController mMapController;
     boolean clicked = false;
     private DatabaseReference mDatabase;
+    Button delete;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        delete = findViewById(R.id.deleteButton);
+
+        delete.setVisibility(View.GONE);
 
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -129,159 +140,209 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         List<String> listID = new ArrayList<>();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Coordinates");
 
-
         Query query = FirebaseDatabase.getInstance().getReference().child("Coordinates");
 
-        //query.orderByChild("Coordinates").equalTo("test");//Here replace title with your key which you want and replace test with value throw which search
-        //query.orderByChild("title").equalTo("test").limitToFirst(1); //If you want to only one value
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        Query queryAuth = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid());
+
+       queryAuth.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                //you get here the list of post from  DB
-                if (dataSnapshot.exists()) {
-                    int i =0;
-                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String role = (String) snapshot.child("role").getValue();
+                System.out.println(role);
+                //put everything here
 
-                        String postId = child.getKey(); //Post Id
-                        //add it here onto a list
-                        listID.add(postId);
-                        i++;
+                //query.orderByChild("Coordinates").equalTo("test");//Here replace title with your key which you want and replace test with value throw which search
+                //query.orderByChild("title").equalTo("test").limitToFirst(1); //If you want to only one value
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        //you get here the list of post from  DB
+                        if (dataSnapshot.exists()) {
+                            int i =0;
+                            for (DataSnapshot child : dataSnapshot.getChildren()) {
 
-
-                        List<Event> list = new ArrayList<>();
-                        for (String mPostId : listID) {
-
-                            Query query1 = FirebaseDatabase.getInstance().getReference().child("Coordinates");
-
-                            System.out.println(mPostId);
-                            query1.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    //you get here the list of post from  DB
-                                    if (dataSnapshot.exists()) {
-                                        for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                            String name = (String) dataSnapshot.child(mPostId).child("name").getValue();
-                                            String longitude = (String) dataSnapshot.child(mPostId).child("longitude").getValue();
-                                            String latitude = (String) dataSnapshot.child(mPostId).child("latitude").getValue();
+                                String postId = child.getKey(); //Post Id
+                                //add it here onto a list
+                                listID.add(postId);
+                                i++;
 
 
-                                            System.out.println(name);
-                                            System.out.println(longitude);
-                                            System.out.println(latitude);
+                                List<Event> list = new ArrayList<>();
+                                for (String mPostId : listID) {
+
+                                    Query query1 = FirebaseDatabase.getInstance().getReference().child("Coordinates");
 
 
-
-                                            GeoPoint geoPoint = new GeoPoint(Double.parseDouble(latitude), Double.parseDouble(longitude));
-                                            Marker marker = new Marker(map);
-                                            marker.setPosition(geoPoint);
-
-
-                                            if (name.equals("Fire")){
-                                                marker.setIcon(getResources().getDrawable(R.drawable.fire_icon));
-                                                marker.setTitle("Fire");
-
-                                            }
-                                            else if (name.equals("Covid")){
-                                                marker.setIcon(getResources().getDrawable(R.drawable.covid_icon));
-                                                marker.setTitle("COVID");
-                                            }
-                                            else if (name.equals("Flood")){
-                                                marker.setIcon(getResources().getDrawable(R.drawable.flood_icon));
-                                                marker.setTitle("Flood");
-                                            }
-
-                                            else if (name.equals("Landslide")){
-                                                marker.setIcon(getResources().getDrawable(R.drawable.landslidewarning_icon));
-                                                marker.setTitle("Landslide");
-                                            }
-
-                                            else if (name.equals("Earthquake")){
-                                                marker.setIcon(getResources().getDrawable(R.drawable.earthquake_icon));
-                                                marker.setTitle("Earthquake");
-                                            }
-                                            else if (name.equals("Typhoon")){
-                                                marker.setIcon(getResources().getDrawable(R.drawable.typhoon_icon));
-                                                marker.setTitle("Typhoon");
-                                            }
+                                    query1.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            //you get here the list of post from  DB
+                                            if (dataSnapshot.exists()) {
+                                                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                                    String name = (String) dataSnapshot.child(mPostId).child("name").getValue();
+                                                    String longitude = (String) dataSnapshot.child(mPostId).child("longitude").getValue();
+                                                    String latitude = (String) dataSnapshot.child(mPostId).child("latitude").getValue();
 
 
+                                                    GeoPoint geoPoint = new GeoPoint(Double.parseDouble(latitude), Double.parseDouble(longitude));
+                                                    Marker marker = new Marker(map);
+                                                    marker.setPosition(geoPoint);
 
 
+                                                    if (name.equals("Fire")){
+                                                        marker.setIcon(getResources().getDrawable(R.drawable.fire_icon));
+                                                        marker.setTitle("Fire");
 
-                                            marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-                                                @Override
-                                                public boolean onMarkerClick(Marker marker, MapView mapView) {
-
-                                                    //if (!clicked){
-
-                                                    marker.showInfoWindow();
-                                                    mapView.getController().animateTo(marker.getPosition());
-                                                    NominatimPOIProvider poiProvider = new NominatimPOIProvider("OSMBonusPackTutoUserAgent");
-                                                    ArrayList<POI> pois = poiProvider.getPOICloseTo(geoPoint, "Hospital", 15, 0.5);
-                                                    FolderOverlay poiMarkers = new FolderOverlay(getApplicationContext());
-                                                    map.getOverlays().add(poiMarkers);
-                                                    Drawable poiIcon = getResources().getDrawable(R.drawable.hospital_icon);
-                                                    for (POI poi:pois){
-                                                        Marker poiMarker = new Marker(map);
-                                                        poiMarker.setTitle(poi.mType);
-                                                        poiMarker.setSnippet(poi.mDescription);
-                                                        poiMarker.setPosition(poi.mLocation);
-                                                        poiMarker.setIcon(poiIcon);
-
-                                                        poiMarkers.add(poiMarker);
-                                                        marker.remove(map);
-                                                        marker.setPosition(geoPoint);
                                                     }
-                                                    long speed = 3;
-                                                    mMapController.animateTo(startPoint,9.00,speed);
+                                                    else if (name.equals("Covid")){
+                                                        marker.setIcon(getResources().getDrawable(R.drawable.covid_icon));
+                                                        marker.setTitle("COVID");
+                                                    }
+                                                    else if (name.equals("Flood")){
+                                                        marker.setIcon(getResources().getDrawable(R.drawable.flood_icon));
+                                                        marker.setTitle("Flood");
+                                                    }
+
+                                                    else if (name.equals("Landslide")){
+                                                        marker.setIcon(getResources().getDrawable(R.drawable.landslidewarning_icon));
+                                                        marker.setTitle("Landslide");
+                                                    }
+
+                                                    else if (name.equals("Earthquake")){
+                                                        marker.setIcon(getResources().getDrawable(R.drawable.earthquake_icon));
+                                                        marker.setTitle("Earthquake");
+                                                    }
+                                                    else if (name.equals("Typhoon")){
+                                                        marker.setIcon(getResources().getDrawable(R.drawable.typhoon_icon));
+                                                        marker.setTitle("Typhoon");
+                                                    }
 
 
-                                                    // }
-                                                    /**
-                                                     else {
-                                                     mMapController.setCenter(startPoint);
-                                                     mMapController.setZoom(7);
-                                                     //map.getOverlays().clear();
-
-                                                     }
-                                                     **/
-                                                    return true;
-                                                }});
-                                            //have some if statements here depending on what type of calamity it is
-                                            map.getOverlays().add(marker);
-                                            //trying to put marker on top
-
-                                        map.invalidate();
 
 
-                                        Event userEvent = new Event();
-                                            userEvent.setName(name);
-                                            userEvent.setLongitude(longitude);
-                                            userEvent.setLatitude(latitude);
+
+                                                    marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+                                                        @Override
+                                                        public boolean onMarkerClick(Marker marker, MapView mapView) {
+
+                                                            //if (!clicked){
+                                                            //set button visible if admin from firebase and button if is pressed take the postid and use code to delete postid and make a copy onto another child ref
 
 
-                                            list.add(userEvent);
+                                                            //lets do the firebase admin thing last
+
+                                                            marker.showInfoWindow();
+                                                            mapView.getController().animateTo(marker.getPosition());
+                                                            NominatimPOIProvider poiProvider = new NominatimPOIProvider("OSMBonusPackTutoUserAgent");
+                                                            ArrayList<POI> pois = poiProvider.getPOICloseTo(geoPoint, "Hospital", 15, 0.5);
+                                                            FolderOverlay poiMarkers = new FolderOverlay(getApplicationContext());
+                                                            map.getOverlays().add(poiMarkers);
+                                                            Drawable poiIcon = getResources().getDrawable(R.drawable.hospital_icon);
+                                                            for (POI poi:pois){
+                                                                Marker poiMarker = new Marker(map);
+                                                                poiMarker.setTitle("Hospital");
+                                                                poiMarker.setSnippet(poi.mDescription);
+                                                                poiMarker.setPosition(poi.mLocation);
+                                                                poiMarker.setIcon(poiIcon);
+
+                                                                poiMarkers.add(poiMarker);
+
+                                                                marker.setPosition(geoPoint);
+                                                            }
+                                                            long speed = 3;
+                                                            mMapController.animateTo(startPoint,9.00,speed);
+
+
+                                                            //THIS WILL SHOW THE BUTTON AND SETS THE BUTTONS ON CLICKER WHCIH TRANSFERS THE EVENT TO RECORD
+                                                            if (role.equals("Administrator")){
+                                                                delete.setVisibility(View.VISIBLE);
+
+                                                                delete.setOnClickListener(new View.OnClickListener() {
+                                                                    public void onClick(View v) {
+
+                                                                        mDatabase = FirebaseDatabase.getInstance().getReference();
+                                                                        Event userEvent = new Event();
+                                                                        userEvent.setName(name);
+                                                                        userEvent.setLongitude(longitude);
+                                                                        userEvent.setLatitude(latitude);
+
+                                                                        mDatabase.child("Records").push().setValue(userEvent);
+
+                                                                        //remove data child from the database i think you can jusit take the uid and delete it
+                                                                        mDatabase.child("Coordinates").child(postId).removeValue();
+                                                                        delete.setVisibility(View.GONE);
+
+
+                                                                        InfoWindow.closeAllInfoWindowsOn(map);
+                                                                        marker.setEnabled(false);
+                                                                        map.getOverlays().remove(poiMarkers);
+
+                                                                        mapView.invalidate();
+                                                                    }
+                                                                });
+
+                                                            }
+
+
+                                                            // }
+                                                            /**
+                                                             else {
+                                                             mMapController.setCenter(startPoint);
+                                                             mMapController.setZoom(7);
+                                                             //map.getOverlays().clear();
+
+                                                             }
+                                                             **/
+                                                            return true;
+                                                        }});
+                                                    //have some if statements here depending on what type of calamity it is
+                                                    map.getOverlays().add(marker);
+                                                    //trying to put marker on top
+
+                                                    map.invalidate();
+
+
+                                                    Event userEvent = new Event();
+                                                    userEvent.setName(name);
+                                                    userEvent.setLongitude(longitude);
+                                                    userEvent.setLatitude(latitude);
+
+
+                                                    list.add(userEvent);
+
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
 
                                         }
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
+                                    });
 
                                 }
-                            });
-
+                            }
                         }
                     }
-                }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
+
 
 
 

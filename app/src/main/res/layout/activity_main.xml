@@ -6,7 +6,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:fitsSystemWindows="false"
     tools:context=".MainActivity"
     tools:openDrawer="start">
 
@@ -14,7 +14,9 @@
     <org.osmdroid.views.MapView
         android:id="@+id/map"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent">
+
+    </org.osmdroid.views.MapView>
 
     <com.google.android.material.navigation.NavigationView
 
@@ -23,7 +25,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/header"
-        app:menu="@menu/main_menu" >
+        app:menu="@menu/main_menu">
 
     </com.google.android.material.navigation.NavigationView>
 
@@ -42,7 +44,6 @@
             android:layout_marginTop="600dp"/>
 
     </RelativeLayout>
-
 
 
 
