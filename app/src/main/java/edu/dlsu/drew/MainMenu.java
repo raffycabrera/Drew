@@ -264,9 +264,12 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
 
                                                                         mDatabase = FirebaseDatabase.getInstance().getReference();
                                                                         Event userEvent = new Event();
+                                                                        long millis=System.currentTimeMillis();
+                                                                        java.util.Date date=new java.util.Date(millis);
                                                                         userEvent.setName(name);
                                                                         userEvent.setLongitude(longitude);
                                                                         userEvent.setLatitude(latitude);
+                                                                        userEvent.setDate(date);
 
                                                                         mDatabase.child("Records").push().setValue(userEvent);
 
