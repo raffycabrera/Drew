@@ -18,10 +18,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import org.osmdroid.bonuspack.location.NominatimPOIProvider;
 import org.osmdroid.bonuspack.location.POI;
@@ -165,7 +172,21 @@ public class Map extends Activity {
                 else if (disaster.equals("Typhoon")){
                     marker = getApplicationContext().getResources().getDrawable(R.drawable.typhoon_icon);
                 }
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                Query queryAuth = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid());
 
+                queryAuth.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                             @Override
+                                                             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                 String namePerson = (String) snapshot.child("name").getValue();
+                                                                 event.setPerson(namePerson);
+                                                             }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
 
 
                  String longitude = Double.toString(((double)loc.getLongitudeE6())/1000000);

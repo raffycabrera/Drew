@@ -153,6 +153,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 System.out.println(role);
                 //put everything here
 
+
                 //query.orderByChild("Coordinates").equalTo("test");//Here replace title with your key which you want and replace test with value throw which search
                 //query.orderByChild("title").equalTo("test").limitToFirst(1); //If you want to only one value
                 query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -185,11 +186,13 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                                                     String longitude = (String) dataSnapshot.child(mPostId).child("longitude").getValue();
                                                     String latitude = (String) dataSnapshot.child(mPostId).child("latitude").getValue();
 
+                                                    String person = (String) dataSnapshot.child(mPostId).child("person").getValue();
+
 
                                                     GeoPoint geoPoint = new GeoPoint(Double.parseDouble(latitude), Double.parseDouble(longitude));
                                                     Marker marker = new Marker(map);
                                                     marker.setPosition(geoPoint);
-
+                                                    marker.setSnippet("Submitted by: "+person);
 
                                                     if (name.equals("Fire")){
                                                         marker.setIcon(getResources().getDrawable(R.drawable.fire_icon));

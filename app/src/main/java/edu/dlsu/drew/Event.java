@@ -6,6 +6,7 @@ public class Event {
     private String Disaster;
     private String longitude, latitude;
     private Date date;
+    private String personSub;
     public Event() {
     }
 
@@ -38,5 +39,14 @@ public class Event {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+
+    public String getPerson() {
+        return personSub;
+    }
+
+    public void setPerson(String person) {
+        this.personSub = person;
     }
 }
