@@ -378,6 +378,11 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 startActivity(intent);
                 break;
             }
+            case R.id.nav_account: {
+                Intent intent = new Intent(this, AccountOptions.class);
+                startActivity(intent);
+                break;
+            }
         }
         //close navigation drawer
         drawerLayout.closeDrawer(GravityCompat.START);
