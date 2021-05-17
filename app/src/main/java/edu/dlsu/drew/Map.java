@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -12,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,7 +22,10 @@ import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -54,8 +59,8 @@ public class Map extends Activity {
     // Storage Permissions
     Event event = new Event();
     String disaster, icon;
-
-
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
 
 
     @Override public void onCreate(Bundle savedInstanceState) {
@@ -86,8 +91,12 @@ public class Map extends Activity {
 
         map = (MapView) findViewById(R.id.map);
         mMapController = (MapController) map.getController();
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
 
+        navigationView.bringToFront();
 
+        navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
 
 
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -272,5 +281,29 @@ public class Map extends Activity {
             }
         }).create();
         alert.show();
+    }
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Handle navigation view item clicks here.
+        switch (item.getItemId()) {
+
+            case R.id.nav_record: {
+                Intent intent = new Intent(this, Map.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.nav_account: {
+                Intent intent = new Intent(this, AccountOptions.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.nav_home: {
+                Intent intent = new Intent(this, MainMenu.class);
+                startActivity(intent);
+                break;
+            }
+        }
+        //close navigation drawer
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 }
