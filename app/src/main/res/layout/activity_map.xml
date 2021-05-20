@@ -25,8 +25,11 @@
     </com.google.android.material.navigation.NavigationView>
 
     <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_width="match_parent">
+        android:background="@color/indigo"
+        >
+
 
         <org.osmdroid.views.MapView
             android:id="@+id/map"
@@ -35,29 +38,47 @@
 
         </org.osmdroid.views.MapView>
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="207dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/border">
+
+        </ImageView>
+
         <Spinner
             android:id="@+id/spinner1"
-            android:layout_width="match_parent"
+            android:layout_width="372dp"
             android:layout_height="wrap_content"
-            android:background="@android:drawable/btn_dropdown"
-            android:spinnerMode="dropdown"
-            android:layout_marginBottom="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="580dp"/>
+            android:layout_marginTop="569dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="114dp"
+            android:background="@android:drawable/btn_dropdown"
+            android:backgroundTint="@color/peach"
+            android:spinnerMode="dropdown" />
 
         <Button
             android:id="@+id/saveMarker"
-            android:layout_width="match_parent"
+            android:layout_width="391dp"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="36dp"
+            android:backgroundTint="@color/peach"
             android:onClick="saveMarker"
             android:text="Save Marker"
-            tools:ignore="OnClick"
-            android:layout_marginBottom="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="610dp"/>/>
+            tools:ignore="OnClick" />
+
+
 
     </RelativeLayout>
 
+
+
 </androidx.drawerlayout.widget.DrawerLayout>
+
