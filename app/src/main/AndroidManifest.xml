@@ -22,7 +22,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DREW"
         tools:replace="android:allowBackup">
-        <activity android:name=".AccountOptions"></activity>
+        <activity android:name=".ViewRecords"></activity>
+        <activity android:name=".AccountOptions" />
         <activity android:name=".Map" />
         <activity android:name=".MainMenu" />
         <activity android:name=".Register" />

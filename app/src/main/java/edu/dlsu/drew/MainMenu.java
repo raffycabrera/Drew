@@ -61,7 +61,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     Toolbar toolbar;
     MapView map = null;
     MapController mMapController;
-    boolean clicked = false;
+
     private DatabaseReference mDatabase;
     Button delete;
 
@@ -92,50 +92,16 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         map = (MapView) findViewById(R.id.map);
         mMapController = (MapController) map.getController();
 
-
-
-
         map.setTileSource(TileSourceFactory.MAPNIK);
         GeoPoint startPoint = new GeoPoint(12.8797, 121.7740);
         mMapController.setCenter(startPoint);
         //mMapController.animateTo(startPoint);
         mMapController.setZoom(7);
 
-        Marker startMarker = new Marker(map);
-
-
-
-
-        //this is the first option it has a function that draws markers
-        /**
-         public void addMarker(GeoPoint center) {
-         MarkerOptions options = new MarkerOptions();
-         Marker marker = new Marker(map);
-         options.position(center);
-         options.anchor( Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-
-         Marker marker = map.AddMarker(options);
-         }try {
-         while (cursor.moveToNext()) {
-         GeoPoint point = new GeoPoint(cursor.getLong("lat"), cursor.getLong("lng"));
-         addMarker(point);
-         }
-         } finally {
-         cursor.close();
-         }
-         **/
 
         List<GeoPoint> geoPoints = new ArrayList<>();
         double [][] xylist = new double[20][20];
 
-
-        //now find a way to get the longitude and lat from firebase
-        //instead of hard coding make this onto a nested for loop
-
-
-        //put the data listener thing here in the ondatachange have it call the functions that need the data
-        //that means youll have to make a function that makes the markers
-        //i guess you will have to find another way to hide all the other marker
 
         List<String> listID = new ArrayList<>();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Coordinates");
@@ -151,7 +117,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String role = (String) snapshot.child("role").getValue();
                 System.out.println(role);
-                //put everything here
 
 
                 //query.orderByChild("Coordinates").equalTo("test");//Here replace title with your key which you want and replace test with value throw which search
@@ -245,10 +210,19 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                                                             Drawable poiIcon = getResources().getDrawable(R.drawable.hospital_icon);
                                                             for (POI poi:pois){
                                                                 Marker poiMarker = new Marker(map);
+                                                                Hospital hospi = new Hospital();
+
                                                                 poiMarker.setTitle("Hospital");
                                                                 poiMarker.setSnippet(poi.mDescription);
                                                                 poiMarker.setPosition(poi.mLocation);
+
+
+                                                                hospi.setName(poi.mDescription);
+                                                                hospi.setLongitude(poi.mLocation);
+
+                                                                mDatabase.child(mPostId).child("Hospitals").push().setValue(hospi);
                                                                 poiMarker.setIcon(poiIcon);
+                                                                //make a new child under each event that holds hospital locations
 
                                                                 poiMarkers.add(poiMarker);
 
@@ -257,6 +231,26 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                                                             long speed = 3;
                                                             mMapController.animateTo(startPoint,9.00,speed);
 
+                                                            if (role.equals("Responder")){
+
+                                                                delete.setVisibility(View.VISIBLE);
+                                                                delete.setText("Respond");
+                                                                delete.setOnClickListener(new View.OnClickListener() {
+                                                                                              @Override
+                                                                                              public void onClick(View v) {
+                                                                                                  String name = (String) snapshot.child("name").getValue();
+                                                                                                  mDatabase.child(postId).child("Respondents").push().setValue(name);
+                                                                                                    delete.setVisibility(View.GONE);
+
+                                                                                              }
+                                                                                          }
+
+
+
+                                                                );
+
+
+                                                                                          }
 
                                                             //THIS WILL SHOW THE BUTTON AND SETS THE BUTTONS ON CLICKER WHCIH TRANSFERS THE EVENT TO RECORD
                                                             if (role.equals("Administrator")){
@@ -273,10 +267,42 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                                                                         userEvent.setLongitude(longitude);
                                                                         userEvent.setLatitude(latitude);
                                                                         userEvent.setDate(date);
+                                                                        userEvent.setPerson(person);
 
-                                                                        mDatabase.child("Records").push().setValue(userEvent);
+                                                                        mDatabase.child("Records").child(postId).setValue(userEvent);
+
 
                                                                         //remove data child from the database i think you can jusit take the uid and delete it
+
+                                                                        //get the hospitals and move it to the new one
+                                                                        //do the same thing for the list of responders
+
+
+                                                                        Query query2 = FirebaseDatabase.getInstance().getReference().child("Coordinates").child(postId).child("Hospitals");
+                                                                        query2.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                            @Override
+                                                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                                for (DataSnapshot child : snapshot.getChildren()){
+                                                                                    Hospital hospi = new Hospital();
+                                                                                    String key = child.getKey();
+                                                                                    String name = (String) child.child("name").getValue();
+                                                                                    GeoPoint longitude = (GeoPoint) child.child("longitude").getValue();
+                                                                                    hospi.setName(name);
+                                                                                    hospi.setLongitude(longitude);
+
+                                                                                    mDatabase.child("Records").child(postId).child("Hospitals").setValue(hospi);
+
+                                                                                }
+
+                                                                            }
+                                                                                @Override
+                                                                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                                                            }
+
+
+                                                                        });
+
                                                                         mDatabase.child("Coordinates").child(postId).removeValue();
                                                                         delete.setVisibility(View.GONE);
 
@@ -289,7 +315,9 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                                                                     }
                                                                 });
 
+
                                                             }
+
 
 
                                                             // }
@@ -387,7 +415,14 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 break;
+            }case R.id.nav_viewRecord: {
+                Intent intent = new Intent(this, ViewRecords.class);
+                startActivity(intent);
+                break;
             }
+
+
+
         }
         //close navigation drawer
         drawerLayout.closeDrawer(GravityCompat.START);

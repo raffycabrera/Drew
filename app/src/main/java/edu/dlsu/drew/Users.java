@@ -2,7 +2,7 @@ package edu.dlsu.drew;
 
 public class Users {
     private String Name;
-    private String Email;
+    private String Location;
 
     public Users() {
     }
@@ -15,12 +15,12 @@ public class Users {
         Name = name;
     }
 
-    public String getEmail() {
-        return Email;
+    public String getLocation() {
+        return Location;
     }
 
-    public void setEmail(String email) {
-        Email = email;
+    public void setLocation(String location) {
+        Location = location;
     }
 
 
