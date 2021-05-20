@@ -35,53 +35,6 @@ public class ViewRecords extends AppCompatActivity {
         expListView = (ExpandableListView) findViewById(R.id.lvExp);
 
         // preparing list data
-        prepareListData();
-
-        listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
-
-        // setting list adapter
-        expListView.setAdapter(listAdapter);
-
-        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-
-            @Override
-            public boolean onChildClick(ExpandableListView parent, android.view.View v, int groupPosition, int childPosition, long id) {
-                Toast.makeText(
-                        getApplicationContext(),
-                        listDataHeader.get(groupPosition)
-                                + " : "
-                                + listDataChild.get(
-                                listDataHeader.get(groupPosition)).get(
-                                childPosition), Toast.LENGTH_SHORT)
-                        .show();
-                return false;
-            }
-        });
-        // Listview Group expanded listener
-        expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-
-            @Override
-            public void onGroupExpand(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
-                        listDataHeader.get(groupPosition) + " Expanded",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-        // Listview Group collasped listener
-        expListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-
-            @Override
-            public void onGroupCollapse(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
-                        listDataHeader.get(groupPosition) + " Collapsed",
-                        Toast.LENGTH_SHORT).show();
-
-            }
-        });
-    }
-
-
-    private void prepareListData() {
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
         List<String> listID = new ArrayList<>();
@@ -108,8 +61,33 @@ public class ViewRecords extends AppCompatActivity {
                         String latitude = (String) snapshot.child(postId).child("latitude").getValue();
                         String person = (String) snapshot.child(postId).child("person").getValue();
 
-                        details.add("Location: \n Submitted by: ");
 
+                        //add ddates here
+                        details.add("Location: "+longitude+" , "+latitude+"\nSubmitted by: "+person);
+
+                        Query query2 = FirebaseDatabase.getInstance().getReference().child("Records").child(postId).child("Hospitals");
+                        query2.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for (DataSnapshot child : snapshot.getChildren()){
+
+                                    String name = (String) child.child("name").getValue();
+
+
+                                    //HashMap longitude1 = (HashMap) child.child("longitude").getValue();
+
+                                    details.add(name);
+
+                                }
+
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+
+
+                        });
 
                         //have hospital details here
                         //use for loop to go through each hospital child in the event child
@@ -118,6 +96,47 @@ public class ViewRecords extends AppCompatActivity {
 
                         listDataChild.put(listDataHeader.get(x),details);
                         x++;
+                        listAdapter = new ExpandableListAdapter(ViewRecords.this, listDataHeader, listDataChild);
+
+                        // setting list adapter
+                        expListView.setAdapter(listAdapter);
+
+                        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+
+                            @Override
+                            public boolean onChildClick(ExpandableListView parent, android.view.View v, int groupPosition, int childPosition, long id) {
+                                Toast.makeText(
+                                        getApplicationContext(),
+                                        listDataHeader.get(groupPosition)
+                                                + " : "
+                                                + listDataChild.get(
+                                                listDataHeader.get(groupPosition)).get(
+                                                childPosition), Toast.LENGTH_SHORT)
+                                        .show();
+                                return false;
+                            }
+                        });
+                        // Listview Group expanded listener
+                        expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+
+                            @Override
+                            public void onGroupExpand(int groupPosition) {
+                                Toast.makeText(getApplicationContext(),
+                                        listDataHeader.get(groupPosition) + " Expanded",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        // Listview Group collasped listener
+                        expListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+
+                            @Override
+                            public void onGroupCollapse(int groupPosition) {
+                                Toast.makeText(getApplicationContext(),
+                                        listDataHeader.get(groupPosition) + " Collapsed",
+                                        Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
 
                     }
 
@@ -125,8 +144,15 @@ public class ViewRecords extends AppCompatActivity {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                                                     }
-                                                 });
+            }
+        });
+
+
+    }
+
+
+    private void prepareListData() {
+
 
 /**
         // Adding child data

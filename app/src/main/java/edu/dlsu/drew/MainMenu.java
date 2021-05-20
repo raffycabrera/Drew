@@ -52,6 +52,8 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class MainMenu extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -208,19 +210,42 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                                                             FolderOverlay poiMarkers = new FolderOverlay(getApplicationContext());
                                                             map.getOverlays().add(poiMarkers);
                                                             Drawable poiIcon = getResources().getDrawable(R.drawable.hospital_icon);
+
+                                                            Query query2 = FirebaseDatabase.getInstance().getReference().child("Coordinates").child(postId);
+                                                            query2.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                @Override
+                                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                    if (snapshot.hasChild("Hospitals")) {
+
+                                                                    }else{
+                                                                        for (POI poi:pois) {
+                                                                            Hospital hospi = new Hospital();
+                                                                            hospi.setName(poi.mDescription);
+                                                                            hospi.setLongitude(poi.mLocation);
+
+                                                                            mDatabase.child(mPostId).child("Hospitals").push().setValue(hospi);
+                                                                        }
+                                                                    }
+
+                                                                }
+
+                                                                @Override
+                                                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                                                }
+                                                            });
+
+
                                                             for (POI poi:pois){
                                                                 Marker poiMarker = new Marker(map);
-                                                                Hospital hospi = new Hospital();
+
 
                                                                 poiMarker.setTitle("Hospital");
                                                                 poiMarker.setSnippet(poi.mDescription);
                                                                 poiMarker.setPosition(poi.mLocation);
 
 
-                                                                hospi.setName(poi.mDescription);
-                                                                hospi.setLongitude(poi.mLocation);
 
-                                                                mDatabase.child(mPostId).child("Hospitals").push().setValue(hospi);
                                                                 poiMarker.setIcon(poiIcon);
                                                                 //make a new child under each event that holds hospital locations
 
@@ -262,7 +287,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                                                                         mDatabase = FirebaseDatabase.getInstance().getReference();
                                                                         Event userEvent = new Event();
                                                                         long millis=System.currentTimeMillis();
-                                                                        java.util.Date date=new java.util.Date(millis);
+                                                                        Date date=new Date(millis);
                                                                         userEvent.setName(name);
                                                                         userEvent.setLongitude(longitude);
                                                                         userEvent.setLatitude(latitude);
@@ -286,11 +311,12 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                                                                                     Hospital hospi = new Hospital();
                                                                                     String key = child.getKey();
                                                                                     String name = (String) child.child("name").getValue();
-                                                                                    GeoPoint longitude = (GeoPoint) child.child("longitude").getValue();
-                                                                                    hospi.setName(name);
-                                                                                    hospi.setLongitude(longitude);
 
-                                                                                    mDatabase.child("Records").child(postId).child("Hospitals").setValue(hospi);
+
+                                                                                    //HashMap longitude1 = (HashMap) child.child("longitude").getValue();
+
+                                                                                    hospi.setName(name);
+                                                                                    mDatabase.child("Records").child(postId).child("Hospitals").push().setValue(hospi);
 
                                                                                 }
 
