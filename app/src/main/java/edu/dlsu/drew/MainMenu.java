@@ -82,6 +82,8 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
 
         navigationView.bringToFront();
 
+        navigationView.setItemIconTintList(null);//color for icons
+
         navigationView.setNavigationItemSelectedListener(this);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
