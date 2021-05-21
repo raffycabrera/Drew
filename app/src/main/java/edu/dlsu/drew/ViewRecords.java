@@ -58,6 +58,7 @@ public class ViewRecords extends AppCompatActivity {
                         String longitude = (String) snapshot.child(postId).child("longitude").getValue();
                         String latitude = (String) snapshot.child(postId).child("latitude").getValue();
                         //add dates here
+
                         listDataHeader.add(name);
 
 

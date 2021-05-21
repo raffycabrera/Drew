@@ -199,11 +199,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                                                         public boolean onMarkerClick(Marker marker, MapView mapView) {
 
 
-
-
-
-
-
                                                             marker.showInfoWindow();
                                                             mapView.getController().animateTo(marker.getPosition());
                                                             NominatimPOIProvider poiProvider = new NominatimPOIProvider("OSMBonusPackTutoUserAgent");
@@ -211,32 +206,6 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                                                             FolderOverlay poiMarkers = new FolderOverlay(getApplicationContext());
                                                             map.getOverlays().add(poiMarkers);
                                                             Drawable poiIcon = getResources().getDrawable(R.drawable.hospital_icon);
-
-                                                            Query query2 = FirebaseDatabase.getInstance().getReference().child("Coordinates").child(postId);
-                                                            query2.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                @Override
-                                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                                    if (snapshot.hasChild("Hospitals")) {
-
-                                                                    }else{
-                                                                        for (POI poi:pois) {
-                                                                            Hospital hospi = new Hospital();
-                                                                            hospi.setName(poi.mDescription);
-                                                                            hospi.setLongitude(poi.mLocation);
-
-                                                                            mDatabase.child(mPostId).child("Hospitals").push().setValue(hospi);
-                                                                        }
-                                                                    }
-
-                                                                }
-
-                                                                @Override
-                                                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                                                }
-                                                            });
-
-
                                                             for (POI poi:pois){
                                                                 Marker poiMarker = new Marker(map);
 
@@ -337,7 +306,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
 
 
                                                                         InfoWindow.closeAllInfoWindowsOn(map);
-                                                                        map.getOverlayManager().remove(marker);
+                                                                        map.getOverlays().remove(marker);
                                                                         map.getOverlays().remove(poiMarkers);
 
                                                                         mapView.invalidate();

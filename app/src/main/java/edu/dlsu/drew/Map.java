@@ -71,6 +71,7 @@ public class Map extends Activity {
     NavigationView navigationView;
     FirebaseDatabase db;
     int id = 0;
+    GeoPoint geopoint;
 
     @Override public void onCreate(Bundle savedInstanceState) {
 
@@ -139,6 +140,9 @@ public class Map extends Activity {
                 Projection proj = mapView.getProjection();
                 GeoPoint loc = (GeoPoint) proj.fromPixels((int)e.getX(), (int)e.getY());
 
+                geopoint  = (GeoPoint) proj.fromPixels((int)e.getX(), (int)e.getY());
+
+
                Drawable marker = getApplicationContext().getResources().getDrawable(R.drawable.ic_cloud);
                 if (disaster.equals("Fire")){
                     marker = getApplicationContext().getResources().getDrawable(R.drawable.fire_icon);
@@ -206,6 +210,7 @@ public class Map extends Activity {
                     mapView.getOverlays().add(anotherItemizedIconOverlay);
 
                 }
+
                 //      dlgThread();
                 return true;
             }
@@ -258,7 +263,21 @@ public class Map extends Activity {
 
 
     //Event event = new Event(name, longitude, latitude)
-        mDatabase.child("Coordinates").push().setValue(event);
+        DatabaseReference reference = mDatabase.child("Coordinates").push();
+        String newKey = reference.getKey();
+        reference.setValue(event);
+
+        NominatimPOIProvider poiProvider = new NominatimPOIProvider("OSMBonusPackTutoUserAgent");
+        ArrayList<POI> pois = poiProvider.getPOICloseTo(geopoint, "Hospital", 15, 0.5);
+
+        for (POI poi:pois) {
+            Hospital hospi = new Hospital();
+            hospi.setName(poi.mDescription);
+            hospi.setLongitude(poi.mLocation);
+
+            mDatabase.child("Coordinates").child(newKey).child("Hospitals").push().setValue(hospi);
+        }
+
         alert("Success!","Marker has been saved to the database.","OK");
 
 
