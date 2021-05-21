@@ -75,11 +75,7 @@ public class Map extends Activity {
     @Override public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        //handle permissions first, before map is created. not depicted here
 
-        //load/initialize the osmdroid configuration, this can be done
-        //Context ctx = getApplicationContext();
-        //Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -89,13 +85,6 @@ public class Map extends Activity {
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
 
-        //setting this before the layout is inflated is a good idea
-        //it 'should' ensure that the map has a writable location for the map cache, even without permissions
-        //if no tiles are displayed, you can try overriding the cache path using Configuration.getInstance().setCachePath
-        //see also StorageUtils
-        //note, the load method also sets the HTTP User Agent to your application's package name, abusing osm's tile servers will get you banned based on this string
-
-        //inflate and create the map
         setContentView(R.layout.activity_map);
 
         map = (MapView) findViewById(R.id.map);
@@ -115,29 +104,12 @@ public class Map extends Activity {
         mMapController.setZoom(7);
 
 
-/**
-
-        NominatimPOIProvider poiProvider = new NominatimPOIProvider("OSMBonusPackTutoUserAgent");
-        ArrayList<POI> pois = poiProvider.getPOICloseTo(startPoint, "hospital", 50, 0.5);
-        FolderOverlay poiMarkers = new FolderOverlay(this);
-        map.getOverlays().add(poiMarkers);
-        Drawable poiIcon = getResources().getDrawable(R.drawable.home_icon);
-        for (POI poi:pois){
-            Marker poiMarker = new Marker(map);
-            poiMarker.setTitle(poi.mType);
-            poiMarker.setSnippet(poi.mDescription);
-            poiMarker.setPosition(poi.mLocation);
-            poiMarker.setIcon(poiIcon);
-
-            poiMarkers.add(poiMarker);
-
-            **/
 
 
 
-//get the spinner from the xml.
+
         Spinner dropdown = findViewById(R.id.spinner1);
-//create a list of items for the spinner.
+
         String[] items = new String[]{"Fire", "Earthquake", "Typhoon", "Flood", "Covid","Landslide"};
 //create an adapter to describe how the items are displayed, adapters are used in several places in android.
 //There are multiple variations of this, but this is the basic variant.

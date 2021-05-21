@@ -84,7 +84,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
 
         navigationView.bringToFront();
 
-        navigationView.setItemIconTintList(null);//color for icons
+        navigationView.setItemIconTintList(null);
 
         navigationView.setNavigationItemSelectedListener(this);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -99,7 +99,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
         map.setTileSource(TileSourceFactory.MAPNIK);
         GeoPoint startPoint = new GeoPoint(12.8797, 121.7740);
         mMapController.setCenter(startPoint);
-        //mMapController.animateTo(startPoint);
+
         mMapController.setZoom(7);
 
 
@@ -123,8 +123,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 System.out.println(role);
 
 
-                //query.orderByChild("Coordinates").equalTo("test");//Here replace title with your key which you want and replace test with value throw which search
-                //query.orderByChild("title").equalTo("test").limitToFirst(1); //If you want to only one value
+
                 query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -148,7 +147,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                                     query1.addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
-                                            //you get here the list of post from  DB
+
                                             if (dataSnapshot.exists()) {
                                                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                                                     String name = (String) dataSnapshot.child(mPostId).child("name").getValue();
@@ -199,11 +198,11 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                                                         @Override
                                                         public boolean onMarkerClick(Marker marker, MapView mapView) {
 
-                                                            //if (!clicked){
-                                                            //set button visible if admin from firebase and button if is pressed take the postid and use code to delete postid and make a copy onto another child ref
 
 
-                                                            //lets do the firebase admin thing last
+
+
+
 
                                                             marker.showInfoWindow();
                                                             mapView.getController().animateTo(marker.getPosition());
@@ -279,9 +278,10 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
 
                                                                                           }
 
-                                                            //THIS WILL SHOW THE BUTTON AND SETS THE BUTTONS ON CLICKER WHCIH TRANSFERS THE EVENT TO RECORD
+
                                                             if (role.equals("Administrator")){
                                                                 delete.setVisibility(View.VISIBLE);
+
 
                                                                 delete.setOnClickListener(new View.OnClickListener() {
                                                                     public void onClick(View v) {
@@ -310,8 +310,9 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                                                                             @Override
                                                                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                                                 for (DataSnapshot child : snapshot.getChildren()){
+                                                                                    System.out.println("this works");
                                                                                     Hospital hospi = new Hospital();
-                                                                                    String key = child.getKey();
+
                                                                                     String name = (String) child.child("name").getValue();
 
 
@@ -336,7 +337,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
 
 
                                                                         InfoWindow.closeAllInfoWindowsOn(map);
-                                                                        marker.setEnabled(false);
+                                                                        map.getOverlayManager().remove(marker);
                                                                         map.getOverlays().remove(poiMarkers);
 
                                                                         mapView.invalidate();
@@ -349,20 +350,11 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
 
 
                                                             // }
-                                                            /**
-                                                             else {
-                                                             mMapController.setCenter(startPoint);
-                                                             mMapController.setZoom(7);
-                                                             //map.getOverlays().clear();
 
-                                                             }
-                                                             **/
                                                             return true;
                                                         }});
-                                                    //have some if statements here depending on what type of calamity it is
-                                                    map.getOverlays().add(marker);
-                                                    //trying to put marker on top
 
+                                                    map.getOverlays().add(marker);
                                                     map.invalidate();
 
 

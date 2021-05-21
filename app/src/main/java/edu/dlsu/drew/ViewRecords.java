@@ -55,12 +55,13 @@ public class ViewRecords extends AppCompatActivity {
                         String postId = child.getKey();
 
                         String name = (String) snapshot.child(postId).child("name").getValue();
-                        listDataHeader.add(name);
-
                         String longitude = (String) snapshot.child(postId).child("longitude").getValue();
                         String latitude = (String) snapshot.child(postId).child("latitude").getValue();
-                        String person = (String) snapshot.child(postId).child("person").getValue();
+                        //add dates here
+                        listDataHeader.add(name);
 
+
+                        String person = (String) snapshot.child(postId).child("person").getValue();
 
                         //add ddates here
                         details.add("Location: "+longitude+" , "+latitude+"\nSubmitted by: "+person);
