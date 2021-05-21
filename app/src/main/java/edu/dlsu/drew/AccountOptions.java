@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -15,13 +16,14 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class AccountOptions extends AppCompatActivity {
     Button changeEmail;
-    TextView newEmail;
     FirebaseAuth fAuth;
     FirebaseUser user;
     String userID;
@@ -30,17 +32,42 @@ public class AccountOptions extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_options);
         changeEmail = findViewById(R.id.changeEmailButton);
-        newEmail = findViewById(R.id.emailChange);
         fAuth = FirebaseAuth.getInstance();
         userID = fAuth.getCurrentUser().getUid();
         user = fAuth.getCurrentUser();
-
-
-
-
     }
     public void changeUserEmail(View view){
+        final EditText updateEmail = new EditText(view.getContext());
+        final AlertDialog.Builder updateEmailDialog = new AlertDialog.Builder(view.getContext());
+        updateEmailDialog.setTitle("Reset Password?");
+        updateEmailDialog.setMessage("New Password should be 6 characters long");
+        updateEmailDialog.setView(updateEmail);
 
+        updateEmailDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String newPassword = updateEmail.getText().toString();
+                //stop
+                user.updatePassword(newPassword).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        alert("Success!","Email Updated", "Ok");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        alert("Failure","Password not updated","Ok");
+                    }
+                });
+            }
+        });
+        updateEmailDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //close dialogue
+            }
+        });
+        updateEmailDialog.create().show();
     }
 
     public void changeUserPassword(View view){
