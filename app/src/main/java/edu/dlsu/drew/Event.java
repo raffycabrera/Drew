@@ -7,7 +7,7 @@ import java.util.List;
 public class Event {
     private String Disaster;
     private String longitude, latitude;
-    private Date date;
+    private String date;
     private String personSub;
     ArrayList<String> responders = new ArrayList<String>();
     public Event() {
@@ -36,11 +36,11 @@ public class Event {
         latitude = lati;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

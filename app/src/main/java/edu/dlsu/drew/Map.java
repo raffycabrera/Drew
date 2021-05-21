@@ -57,6 +57,7 @@ import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -189,8 +190,18 @@ public class Map extends Activity {
                 // get the date and time
                 long millis=System.currentTimeMillis();
                 java.util.Date date=new java.util.Date(millis);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                int month = calendar.get(Calendar.MONTH)+1;
+                int year = calendar.get(Calendar.YEAR);
+
+
+                String dateString = (day+"/"+month+"/"+year);
+
                 //setting event to be placed onto firebase
-                setEvent(disaster,longitude,latitude,date);
+                setEvent(disaster,longitude,latitude,dateString);
 
 
 
@@ -285,7 +296,7 @@ public class Map extends Activity {
 }
 
 //this will set the events stuff (global variable ) so that when you click savemarker it just shows the object
-    public void setEvent (String name, String longi, String lati,Date date){
+    public void setEvent (String name, String longi, String lati, String date){
 
         event.setName(name);
         event.setLatitude(lati);

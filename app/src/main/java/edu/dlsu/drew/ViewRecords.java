@@ -15,6 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.core.view.View;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -57,12 +58,14 @@ public class ViewRecords extends AppCompatActivity {
                         String name = (String) snapshot.child(postId).child("name").getValue();
                         String longitude = (String) snapshot.child(postId).child("longitude").getValue();
                         String latitude = (String) snapshot.child(postId).child("latitude").getValue();
-                        //add dates here
 
-                        listDataHeader.add(name);
+                        //add dates here
+                        String date = (String) snapshot.child(postId).child("date").getValue();
+                        listDataHeader.add(name+" "+date);
 
 
                         String person = (String) snapshot.child(postId).child("person").getValue();
+
 
                         //add ddates here
                         details.add("Location: "+longitude+" , "+latitude+"\nSubmitted by: "+person);

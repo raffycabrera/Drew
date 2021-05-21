@@ -52,6 +52,7 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -257,12 +258,23 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
 
                                                                         mDatabase = FirebaseDatabase.getInstance().getReference();
                                                                         Event userEvent = new Event();
+
+
                                                                         long millis=System.currentTimeMillis();
-                                                                        Date date=new Date(millis);
+                                                                        java.util.Date date=new java.util.Date(millis);
+                                                                        Calendar calendar = Calendar.getInstance();
+                                                                        calendar.setTime(date);
+
+                                                                        int day = calendar.get(Calendar.DAY_OF_MONTH);
+                                                                        int month = calendar.get(Calendar.MONTH)+1;
+                                                                        int year = calendar.get(Calendar.YEAR);
+
+
+                                                                        String dateString = (day+"/"+month+"/"+year);
                                                                         userEvent.setName(name);
                                                                         userEvent.setLongitude(longitude);
                                                                         userEvent.setLatitude(latitude);
-                                                                        userEvent.setDate(date);
+                                                                        userEvent.setDate(dateString);
                                                                         userEvent.setPerson(person);
 
                                                                         mDatabase.child("Records").child(postId).setValue(userEvent);
