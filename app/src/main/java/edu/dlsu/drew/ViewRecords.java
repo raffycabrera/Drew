@@ -80,12 +80,10 @@ public class ViewRecords extends AppCompatActivity {
 
                                     String Respondent = (String) child.getValue();
                                     respondentList.add(Respondent);
-
-                                }
-                                for(String name: respondentList) {
-                                    respondentListString.concat(name);
+                                    respondentListString = respondentListString.concat(Respondent + " ");
                                 }
 
+                                System.out.println(respondentListString);
                                 details.add(respondentListString);
 
 
