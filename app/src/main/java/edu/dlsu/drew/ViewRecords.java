@@ -70,6 +70,36 @@ public class ViewRecords extends AppCompatActivity {
                         //add ddates here
                         details.add("Location: "+longitude+" , "+latitude+"\nSubmitted by: "+person);
 
+                        Query query3= FirebaseDatabase.getInstance().getReference().child("Records").child(postId).child("Respondents");
+                        query3.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                String respondentListString="Responders: ";
+                                ArrayList<String> respondentList = new ArrayList<String>();
+                                for (DataSnapshot child : snapshot.getChildren()){
+
+                                    String Respondent = (String) child.getValue();
+                                    respondentList.add(Respondent);
+
+                                }
+                                for(String name: respondentList) {
+                                    respondentListString.concat(name);
+                                }
+
+                                details.add(respondentListString);
+
+
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+
+
+                        });
+
+
+
                         Query query2 = FirebaseDatabase.getInstance().getReference().child("Records").child(postId).child("Hospitals");
                         query2.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
