@@ -244,7 +244,7 @@ public class Map extends Activity {
         notif.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                notification();
+                notification(disaster);
             }
 
             @Override
@@ -331,15 +331,42 @@ public class Map extends Activity {
         }).create();
         alert.show();
     }
-    private void notification(){
+    private void notification(String disaster){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel("n","n", NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel);
         }
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "n").setContentText("DREW").setSmallIcon(R.drawable.notification_icon).setAutoCancel(true).setContentText(disaster +" Warning");
+        if (disaster.equals("Fire")){
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "n").setContentText("DREW").setSmallIcon(R.drawable.notification_icon).setAutoCancel(true).setContentText("Fire Warning");
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
         managerCompat.notify(999,builder.build());
+        }
+        else if (disaster.equals("Covid")){
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "n").setContentText("DREW").setSmallIcon(R.drawable.notification_icon).setAutoCancel(true).setContentText("Covid Warning");
+            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
+            managerCompat.notify(999,builder.build());
+        }
+        else if (disaster.equals("Flood")){
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "n").setContentText("DREW").setSmallIcon(R.drawable.notification_icon).setAutoCancel(true).setContentText("Flood Warning");
+            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
+            managerCompat.notify(999,builder.build());
+        }
+        else if (disaster.equals("Landslide")){
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "n").setContentText("DREW").setSmallIcon(R.drawable.notification_icon).setAutoCancel(true).setContentText("Landslide Warning");
+            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
+            managerCompat.notify(999,builder.build());
+        }
+        else if (disaster.equals("Earthquake")){
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "n").setContentText("DREW").setSmallIcon(R.drawable.notification_icon).setAutoCancel(true).setContentText("Earthquake Warning");
+            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
+            managerCompat.notify(999,builder.build());
+        }
+        else if (disaster.equals("Typhoon")){
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "n").setContentText("DREW").setSmallIcon(R.drawable.notification_icon).setAutoCancel(true).setContentText("Typhoon Warning");
+            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
+            managerCompat.notify(999,builder.build());
+        }
     }
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
