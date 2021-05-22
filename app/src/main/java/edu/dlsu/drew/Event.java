@@ -1,6 +1,7 @@
 package edu.dlsu.drew;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -59,6 +60,7 @@ public class Event {
     public void addResponders( String responder){
         responders.add(responder);
     }
-    
-    
+    public void setRespondersList(ArrayList<String> newResponders){  Collections.copy(responders,newResponders);}
+
+
 }

@@ -53,6 +53,7 @@ import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -156,6 +157,8 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                                                     String latitude = (String) dataSnapshot.child(mPostId).child("latitude").getValue();
 
                                                     String person = (String) dataSnapshot.child(mPostId).child("person").getValue();
+
+
 
 
                                                     GeoPoint geoPoint = new GeoPoint(Double.parseDouble(latitude), Double.parseDouble(longitude));
@@ -277,6 +280,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                                                                         userEvent.setDate(dateString);
                                                                         userEvent.setPerson(person);
 
+
                                                                         mDatabase.child("Records").child(postId).setValue(userEvent);
 
 
@@ -307,6 +311,29 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                                                                             }
                                                                                 @Override
                                                                                 public void onCancelled(@NonNull DatabaseError error) {
+
+                                                                            }
+
+
+                                                                        });
+                                                                        Query query3 = FirebaseDatabase.getInstance().getReference().child("Coordinates").child(postId).child("Respondents");
+                                                                        query3.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                            @Override
+                                                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                                for (DataSnapshot child : snapshot.getChildren()){
+
+                                                                                    String name = (String) child.getValue();
+
+
+                                                                                    //HashMap longitude1 = (HashMap) child.child("longitude").getValue();
+
+                                                                                    mDatabase.child("Records").child(postId).child("Respondents").push().setValue(name);
+
+                                                                                }
+
+                                                                            }
+                                                                            @Override
+                                                                            public void onCancelled(@NonNull DatabaseError error) {
 
                                                                             }
 
