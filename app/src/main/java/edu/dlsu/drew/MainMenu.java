@@ -237,9 +237,48 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                                                                 delete.setOnClickListener(new View.OnClickListener() {
                                                                                               @Override
                                                                                               public void onClick(View v) {
-                                                                                                  String name = (String) snapshot.child("name").getValue();
-                                                                                                  mDatabase.child(postId).child("Respondents").push().setValue(name);
-                                                                                                    delete.setVisibility(View.GONE);
+
+                                                                                                  String respondentname = (String) snapshot.child("name").getValue();
+
+                                                                                                  Query queryR = FirebaseDatabase.getInstance().getReference().child("Coordinates").child(postId).child("Respondents");
+
+                                                                                                  queryR.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                      @Override
+                                                                                                      public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                                                          if(snapshot.exists()) {
+                                                                                                              for (DataSnapshot child : snapshot.getChildren()) {
+
+
+                                                                                                                  if (child.getValue().equals(respondentname)) {
+                                                                                                                      delete.setVisibility(View.GONE);
+
+                                                                                                                  } else {
+                                                                                                                      mDatabase.child(postId).child("Respondents").push().setValue(respondentname);
+                                                                                                                      delete.setVisibility(View.GONE);
+                                                                                                                  }
+
+
+                                                                                                              }
+                                                                                                          }else {
+                                                                                                              mDatabase.child(postId).child("Respondents").push().setValue(respondentname);
+                                                                                                              delete.setVisibility(View.GONE);
+                                                                                                          }
+
+
+
+
+                                                                                                      }
+                                                                                                      @Override
+                                                                                                      public void onCancelled(@NonNull DatabaseError error) {
+
+                                                                                                      }
+
+
+                                                                                                  });
+
+
+
+
 
                                                                                               }
                                                                                           }
@@ -325,7 +364,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                                                                                     String name = (String) child.getValue();
 
 
-                                                                                    //HashMap longitude1 = (HashMap) child.child("longitude").getValue();
+
 
                                                                                     mDatabase.child("Records").child(postId).child("Respondents").push().setValue(name);
 
