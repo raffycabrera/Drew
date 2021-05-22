@@ -244,7 +244,7 @@ public class Map extends Activity {
         notif.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                notification(disaster);
+                notification();
             }
 
             @Override
@@ -331,7 +331,7 @@ public class Map extends Activity {
         }).create();
         alert.show();
     }
-    private void notification(String disaster){
+    private void notification(){
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Coordinates");
         ref.orderByKey().limitToLast(1).addChildEventListener(new ChildEventListener() {
@@ -343,36 +343,10 @@ public class Map extends Activity {
                     NotificationManager manager = getSystemService(NotificationManager.class);
                     manager.createNotificationChannel(channel);
                 }
-                if (disaster.equals("Fire")){
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(Map.this, "n").setContentText("DREW").setSmallIcon(R.drawable.notification_icon).setAutoCancel(true).setContentText("Fire Warning");
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(Map.this, "n").setContentText("DREW").setSmallIcon(R.drawable.notification_icon).setAutoCancel(true).setContentText(disaster +" Warning");
                     NotificationManagerCompat managerCompat = NotificationManagerCompat.from(Map.this);
                     managerCompat.notify(999,builder.build());
-                }
-                else if (disaster.equals("Covid")){
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(Map.this, "n").setContentText("DREW").setSmallIcon(R.drawable.notification_icon).setAutoCancel(true).setContentText("Covid Warning");
-                    NotificationManagerCompat managerCompat = NotificationManagerCompat.from(Map.this);
-                    managerCompat.notify(999,builder.build());
-                }
-                else if (disaster.equals("Flood")){
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(Map.this, "n").setContentText("DREW").setSmallIcon(R.drawable.notification_icon).setAutoCancel(true).setContentText("Flood Warning");
-                    NotificationManagerCompat managerCompat = NotificationManagerCompat.from(Map.this);
-                    managerCompat.notify(999,builder.build());
-                }
-                else if (disaster.equals("Landslide")){
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(Map.this, "n").setContentText("DREW").setSmallIcon(R.drawable.notification_icon).setAutoCancel(true).setContentText("Landslide Warning");
-                    NotificationManagerCompat managerCompat = NotificationManagerCompat.from(Map.this);
-                    managerCompat.notify(999,builder.build());
-                }
-                else if (disaster.equals("Earthquake")){
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(Map.this, "n").setContentText("DREW").setSmallIcon(R.drawable.notification_icon).setAutoCancel(true).setContentText("Earthquake Warning");
-                    NotificationManagerCompat managerCompat = NotificationManagerCompat.from(Map.this);
-                    managerCompat.notify(999,builder.build());
-                }
-                else if (disaster.equals("Typhoon")){
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(Map.this, "n").setContentText("DREW").setSmallIcon(R.drawable.notification_icon).setAutoCancel(true).setContentText("Typhoon Warning");
-                    NotificationManagerCompat managerCompat = NotificationManagerCompat.from(Map.this);
-                    managerCompat.notify(999,builder.build());
-                }
+
 
 
             }
