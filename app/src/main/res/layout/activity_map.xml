@@ -19,6 +19,7 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/header"
         app:menu="@menu/main_menu"
+        app:itemIconTint="@color/peach"
         android:onClick="onNavigationItemSelected"
         tools:ignore="OnClick">
 

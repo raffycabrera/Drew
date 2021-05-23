@@ -10,8 +10,6 @@
     tools:context=".MainActivity"
     tools:openDrawer="start">
 
-
-
     <org.osmdroid.views.MapView
         android:id="@+id/map"
         android:layout_width="fill_parent"
