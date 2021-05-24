@@ -13,17 +13,19 @@
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="274dp"
-        android:layout_height="60dp"
+        android:layout_width="271dp"
+        android:layout_height="65dp"
         android:layout_gravity="center"
         app:srcCompat="@mipmap/logo_drew_foreground" />
 
     <TextView
-        android:layout_width="347dp"
+        android:layout_width="204dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="DREW MENU"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+        android:layout_gravity="center"
+        android:fontFamily="sans-serif-black"
+        android:text="Menu Options"
+        android:textSize="30dp"
+        android:textStyle="bold" />
 
 
 </LinearLayout>
