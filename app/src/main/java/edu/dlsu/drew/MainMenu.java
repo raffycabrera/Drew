@@ -479,11 +479,16 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 break;
             }
             case R.id.nav_home: {
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, MainMenu.class);
                 startActivity(intent);
                 break;
             }case R.id.nav_viewRecord: {
                 Intent intent = new Intent(this, ViewRecords.class);
+                startActivity(intent);
+                break;
+            }case R.id.nav_logout: {
+
+                Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 break;
             }

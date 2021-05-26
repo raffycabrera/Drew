@@ -392,6 +392,10 @@ public class Map extends Activity {
                 Intent intent = new Intent(this, MainMenu.class);
                 startActivity(intent);
                 break;
+            }case R.id.nav_logout: {
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                break;
             }
         }
         //close navigation drawer

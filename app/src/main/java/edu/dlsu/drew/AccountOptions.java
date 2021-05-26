@@ -3,12 +3,16 @@ package edu.dlsu.drew;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.accounts.Account;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,6 +26,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,16 +37,25 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-public class AccountOptions extends AppCompatActivity {
+public class AccountOptions extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     Button changeEmail;
     FirebaseAuth fAuth;
     FirebaseUser user;
     TextView mAdminVerifText;
     EditText mAdminVerif;
     String userID,currentAccountRole, selectedRole,adminVerifPass;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        navigationView = findViewById(R.id.nav_view);
+
+
+
         setContentView(R.layout.activity_account_options);
         changeEmail = findViewById(R.id.changeEmailButton);
         mAdminVerif = findViewById(R.id.adminVerif);
@@ -197,4 +211,43 @@ public class AccountOptions extends AppCompatActivity {
                 });
         // [END send_email_verification]
     }
+
+
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.nav_record: {
+                Intent intent = new Intent(this, Map.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.nav_account: {
+                Intent intent = new Intent(this, AccountOptions.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.nav_home: {
+                Intent intent = new Intent(this, MainMenu.class);
+                startActivity(intent);
+                break;
+            }case R.id.nav_viewRecord: {
+                Intent intent = new Intent(this, ViewRecords.class);
+                startActivity(intent);
+                break;
+            }case R.id.nav_logout: {
+
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                break;
+            }
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+
+
+
     }
