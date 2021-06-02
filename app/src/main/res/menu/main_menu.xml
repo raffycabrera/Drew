@@ -17,10 +17,6 @@
                     android:icon="@drawable/home_icon"
                     />
                 <item
-                    android:title="Notifications"
-                    android:id="@+id/nav_notifications"
-                    android:icon="@drawable/notification_icon"/>
-                <item
                     android:title="Add Event"
                     android:id="@+id/nav_record"
                     android:icon="@drawable/map_icon" />
