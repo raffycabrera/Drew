@@ -19,6 +19,7 @@ Basic - basic account with basic functionality
 Responder - responder account has the ability to respond to events on the main menu, this will put their name on the responder list of the event  
 Admin - Admin accounts can only be created when the user knows the admin password to create an account.  
         Additional features that the admin has is they get a delete button to delete events that have passed.  
+        Admin password is : #em!er)ge&nc^2y  
 
 2.)Once logged in, user will land on the main menu where the map of the Philippines will be displayed.On the map, if there are events recorded on the database there will 
   be icons corresponding to the disaster on the map. When the user clicks on the icon it shows the type of the disaster, the person who submitted it, and then shows all the icons for nearby hospitals when clicked it shows the details of the hospital.  
