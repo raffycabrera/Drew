@@ -2,11 +2,17 @@ package edu.dlsu.drew;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -19,18 +25,26 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class ViewRecords extends AppCompatActivity {
+public class ViewRecords extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
+    FirebaseAuth fAuth;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_records);
-
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.bringToFront();
+        navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
 
         // get the listview
         expListView = (ExpandableListView) findViewById(R.id.lvExp);
@@ -177,5 +191,38 @@ public class ViewRecords extends AppCompatActivity {
 
 
     }
+
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Handle navigation view item clicks here.
+
+        switch (item.getItemId()) {
+
+            case R.id.nav_record: {
+                Intent intent = new Intent(this, Map.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.nav_account: {
+                Intent intent = new Intent(this, AccountOptions.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.nav_home: {
+                Intent intent = new Intent(this, MainMenu.class);
+                startActivity(intent);
+                break;
+            }case R.id.nav_logout: {
+                fAuth = FirebaseAuth.getInstance();
+                fAuth.signOut();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                break;
+            }
+        }
+        //close navigation drawer
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
 
 }

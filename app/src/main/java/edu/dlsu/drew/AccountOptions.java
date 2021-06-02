@@ -52,11 +52,16 @@ public class AccountOptions extends AppCompatActivity implements NavigationView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        navigationView = findViewById(R.id.nav_view);
 
 
 
         setContentView(R.layout.activity_account_options);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.bringToFront();
+        navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
+
         changeEmail = findViewById(R.id.changeEmailButton);
         mAdminVerif = findViewById(R.id.adminVerif);
         mAdminVerifText = findViewById(R.id.textView6);
@@ -216,7 +221,6 @@ public class AccountOptions extends AppCompatActivity implements NavigationView.
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {
-
             case R.id.nav_record: {
                 Intent intent = new Intent(this, Map.class);
                 startActivity(intent);
@@ -236,8 +240,9 @@ public class AccountOptions extends AppCompatActivity implements NavigationView.
                 startActivity(intent);
                 break;
             }case R.id.nav_logout: {
-
-                Intent intent = new Intent(this, MainActivity.class);
+                fAuth = FirebaseAuth.getInstance();
+                fAuth.signOut();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 break;
             }

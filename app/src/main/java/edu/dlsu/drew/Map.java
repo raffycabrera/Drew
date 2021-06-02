@@ -66,6 +66,7 @@ public class Map extends Activity {
     MapController mMapController;
     private DatabaseReference mDatabase,notif;
     // Storage Permissions
+    FirebaseAuth fAuth;
     Event event = new Event();
     String disaster, icon;
     DrawerLayout drawerLayout;
@@ -376,6 +377,7 @@ public class Map extends Activity {
     }
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
+        drawerLayout = findViewById(R.id.drawer_layout);
         switch (item.getItemId()) {
 
             case R.id.nav_record: {
@@ -392,11 +394,18 @@ public class Map extends Activity {
                 Intent intent = new Intent(this, MainMenu.class);
                 startActivity(intent);
                 break;
+            }case R.id.nav_viewRecord: {
+                Intent intent = new Intent(this, ViewRecords.class);
+                startActivity(intent);
+                break;
             }case R.id.nav_logout: {
-                Intent intent = new Intent(this, MainActivity.class);
+                fAuth = FirebaseAuth.getInstance();
+                fAuth.signOut();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 break;
             }
+
         }
         //close navigation drawer
         drawerLayout.closeDrawer(GravityCompat.START);

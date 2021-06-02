@@ -65,6 +65,7 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
     Toolbar toolbar;
     MapView map = null;
     MapController mMapController;
+    FirebaseAuth fAuth;
 
     private DatabaseReference mDatabase;
     Button delete;
@@ -487,8 +488,9 @@ public class MainMenu extends AppCompatActivity implements NavigationView.OnNavi
                 startActivity(intent);
                 break;
             }case R.id.nav_logout: {
-
-                Intent intent = new Intent(this, MainActivity.class);
+                fAuth = FirebaseAuth.getInstance();
+                fAuth.signOut();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 break;
             }
