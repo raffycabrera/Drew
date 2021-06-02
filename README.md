@@ -1,7 +1,7 @@
-#Disaster Response Emergency Workspace (DREW) \n
+#Disaster Response Emergency Workspace (DREW)  
 Disaster Response Emergency Workspace (DREW) is an android application that is used to notify users of the app if there is an emergency or disaster occurring.
 
-#Requirements or dependencies used
+#Requirements or Dependencies Used  
 Android Package is used for all the basic functionalities.
 Firebase and its package are used to handle the data both in writing onto the real time database as well as reading from it. Additionally it is used for the authentication processes including login and registration. Datasnapshots are frequently used to scan through the data of a node from a query that will be used in the program.
 OSMDROID package has been used for the map activities, including print the map for the disasters to be displayed in as well as the map in the add records screen. It was used to take the longitude and latitude for the markers that are needed.
