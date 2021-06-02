@@ -11,6 +11,20 @@ Nomanatim queries are used for locating the nearby hospitals of the disaster, th
 #Developer Environment
 The code is written in java as it is the official language of android development. The main compiler used is Android Studio. Android Studio has a virtual device that can run the app for us during our testing and development.
 
+
+#MANUAL 
+1.) After launching the application login an account, or if you are a new user, register a new account.
+  When registering an account, select an appropriate role:
+  Basic - basic account with basic functionality
+  Responder - responder account has the ability to respond to events on the main menu, this will put their name on the responder list of the event
+  Admin - Admin accounts can only be created when the user knows the admin password to create an account.
+          Additional features th
+2.)Once logged in, user will land on the main menu where the map of the Philippines will be displayed.
+  On the map, if there are events recorded the
+3.)
+4.)
+
+
 #Use Cases Achieved
 Login 
 Register Account
