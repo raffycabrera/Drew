@@ -63,6 +63,12 @@ May 23, 2021
 -GUI visual improvements throughout the program 
 -Currently use cases 1-9 are now complete
 
+June 01, 2021
+
+-signout function fully functional
+-all navigationbars are functional 
+-all use cases are now complete
+
 #Firebase
 To be able to use the account authentication and Realtime database features, access the tools section of android studio and select firebase. Various other features can be accessed and any given project can be connected to Firebase through this method. A developer should have a gmail account to be able to freely use and connect projects to Firebase.
 
