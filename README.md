@@ -1,4 +1,4 @@
-#Disaster Response Emergency Workspace (DREW)
+#Disaster Response Emergency Workspace (DREW) \n
 Disaster Response Emergency Workspace (DREW) is an android application that is used to notify users of the app if there is an emergency or disaster occurring.
 
 #Requirements or dependencies used
